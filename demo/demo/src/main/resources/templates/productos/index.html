@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>+ Mass - Productos</title>
+  <link rel="stylesheet" href="">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/">+ Mass</a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link text-white" href="/">Inicio</a>
+        <a class="nav-link text-white active" href="/productos">Productos</a>
+        <a class="nav-link text-white active" href="/proveedores">Proveedores</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <div class="container mt-4">
+    <h1 class="text-center mb-3">Listado de Productos</h1>
+    <p class="text-center text-muted">Tu tienda de confianza para productos de calidad.</p>
+    <!-- BARRA de busqueda productos-->
+     <div class="card mb-4">
+      <div class="card-body">
+        <form class="d-flex" th:action="@{/productos/search}" method="get">
+          <input class="form-control me-2" type="search" name="nombre" placeholder="Buscar producto por nombre" aria-label="Search" required>
+          <button class="btn btn-outline-primary" type="submit">
+            <i class="fas fa-search me-2"></i>Buscar
+          </button>
+        </form>
+      </div>
+
+     </div>
+    <!-- Botón crear -->
+    <div class="d-flex justify-content-end mb-3">
+      <a class="btn btn-primary" href="/productos/create">➕ Agregar Producto</a>
+    </div>
+    <!-- Agrega esto después del título y antes de la tabla -->
+    <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${param.success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <span th:text="${param.error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <!-- TABLA SIMPLIFICADA -->
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-primary text-center">
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Marca</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Validación si no hay productos -->
+          <tr th:if="${productos == null or productos.empty}">
+            <td colspan="7" class="text-center py-4">
+              <p class="text-muted">No hay productos registrados</p>
+              <a href="/productos/create" class="btn btn-primary">Agregar Primer Producto</a>
+            </td>
+          </tr>
+          
+          <!-- Lista de productos - VERSIÓN SIMPLIFICADA -->
+          <tr th:each="producto : ${productos}">
+            <td th:text="${producto.id}"></td>
+            <td th:text="${producto.nombre}"></td>
+            <td th:text="${producto.categoria} ?: 'N/A'"></td>
+            <td th:text="${producto.marca} ?: 'N/A'"></td>
+            <td>$<span th:text="${producto.precio}"></span></td>
+            <td>
+              <!-- EXPRESIÓN MÁS SIMPLE -->
+              <span th:if="${producto.stock > 10}" class="badge bg-success" th:text="${producto.stock} + ' und'"></span>
+              <span th:if="${producto.stock <= 10 and producto.stock > 0}" class="badge bg-warning" th:text="${producto.stock} + ' und'"></span>
+              <span th:if="${producto.stock == 0}" class="badge bg-danger">Agotado</span>
+            </td>
+            <td class="text-center">
+              <a th:href="@{'/productos/edit/' + ${producto.id}}" class="btn btn-warning btn-sm">✏️ Editar</a>
+              <a th:href="@{'/productos/delete/' + ${producto.id}}" class="btn btn-danger btn-sm"
+                onclick="return confirm('¿Seguro que deseas eliminar este producto?');">🗑️ Eliminar</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-light text-center py-3 mt-4">
+    <p class="mb-0">© 2025 + Mass | Todos los derechos reservados</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

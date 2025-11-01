@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div class="form-container" th:fragment="content">
+        <!-- Encabezado del formulario -->
+        <div class="form-header">
+            <i class="fas fa-edit fa-2x mb-2"></i>
+            <h2>Editar Usuario</h2>
+            <p class="form-subtitle">Modifica la información del usuario</p>
+        </div>
+
+        <!-- Mensajes de éxito/error -->
+        <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${mensaje}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Formulario CORREGIDO -->
+        <form method="post" th:action="@{'/dashboard/usuarios/edit/' + ${usuarioDto.id}}" th:object="${usuarioDto}" id="usuarioEditForm">
+            <!-- Campo hidden para el ID -->
+            <input type="hidden" th:field="*{id}" />
+            
+            <!-- Información Personal -->
+            <h3 class="section-title">Información Personal</h3>
+            <div class="row row-group mb-3">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label required">Nombre</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" class="form-control" th:field="*{nombre}" 
+                               placeholder="Ingrese el nombre" required>
+                    </div>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label required">Apellido</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" class="form-control" th:field="*{apellido}" 
+                               placeholder="Ingrese el apellido" required>
+                    </div>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+                </div>
+            </div>
+
+            <!-- Sexo y DNI en línea -->
+            <div class="row compact-row mb-3">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label required">
+                        <span class="combo-label">
+                            <i class="fas fa-venus-mars"></i> Sexo
+                        </span>
+                    </label>
+                    <select class="form-select" th:field="*{sexo}" required>
+                        <option value="">Seleccione sexo</option>
+                        <option value="M">👨 Masculino</option>
+                        <option value="F">👩 Femenino</option>
+                    </select>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label required">DNI</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" class="form-control" th:field="*{nroDocumento}" 
+                               placeholder="Número de documento" required 
+                               maxlength="8" pattern="[0-9]{8}">
+                    </div>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('nroDocumento')}" th:errors="*{nroDocumento}"></div>
+                </div>
+            </div>
+
+            <!-- Fecha de Nacimiento -->
+            <div class="mb-3">
+                <label class="form-label required">Fecha de Nacimiento</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                    <input type="date" class="form-control" th:field="*{fechaNacimiento}" required>
+                </div>
+                <div class="text-danger small" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></div>
+            </div>
+
+            <!-- Información de Acceso -->
+            <h3 class="section-title">Información de Acceso</h3>
+            <div class="mb-3">
+                <label class="form-label required">Nombre de Usuario</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-at"></i>
+                    <input type="text" class="form-control" th:field="*{nombreUsuario}" 
+                           placeholder="Ingrese el nombre de usuario" required>
+                </div>
+                <div class="text-danger small" th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}"></div>
+            </div>
+
+            <div class="row compact-row mb-3">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label required">
+                        <span class="combo-label">
+                            <i class="fas fa-user-tag"></i> Rol
+                        </span>
+                    </label>
+                    <select class="form-select" th:field="*{rol}" required>
+                        <option value="">Seleccione rol</option>
+                        <option th:each="rol : ${roles}" 
+                                th:value="${rol}" 
+                                th:text="${rol}"
+                                th:selected="${usuarioDto.rol == rol}">
+                        </option>
+                    </select>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}"></div>
+                </div>
+                
+                <!-- Estado del usuario -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label required">
+                        <span class="combo-label">
+                            <i class="fas fa-circle"></i> Estado
+                        </span>
+                    </label>
+                    <select class="form-select" th:field="*{Activo}" required>
+                        <option th:value="true" th:text="Activo"></option>
+                        <option th:value="false" th:text="Inactivo"></option>
+                    </select>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></div>
+                </div>
+            </div>
+
+            <!-- Sección opcional para cambiar contraseña -->
+            <div class="mb-4">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="cambiarPasswordToggle">
+                    <label class="form-check-label" for="cambiarPasswordToggle">
+                        <i class="fas fa-key"></i> Cambiar contraseña
+                    </label>
+                </div>
+                
+                <div id="passwordFields" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nueva Contraseña</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" class="form-control" id="nuevaPassword" 
+                                       name="nuevaPassword" placeholder="Dejar en blanco para no cambiar">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Confirmar Contraseña</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" class="form-control" id="confirmarPassword" 
+                                       placeholder="Confirmar nueva contraseña">
+                            </div>
+                            <div class="text-danger small" id="passwordMatchError" style="display: none;">
+                                <i class="fas fa-exclamation-circle"></i> Las contraseñas no coinciden
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de acción CORREGIDOS -->
+            <div class="form-actions d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary" id="submit-btn">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- JavaScript para funcionalidades adicionales -->
+    
+
+    <style>
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .input-with-icon input,
+        .input-with-icon select {
+            padding-left: 40px;
+        }
+        
+        .section-title {
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-subtitle {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        .combo-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-check-label {
+            font-weight: 500;
+        }
+    </style>
+</body>
+</html>

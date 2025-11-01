@@ -1,0 +1,98 @@
+<!-- Menu lateral -->
+<nav class="sidebar" th:fragment="sidebar">
+    <div class="logo">
+        <div class="logo-icon">
+            <i class="fas fa-cogs"></i>
+        </div>
+        <div class="logo-text">Panel Admin</div>
+        <div class="img-logo">
+            <img th:src="@{/img/logo.png}" alt="Logo">
+        </div>
+    </div>
+
+    <!-- Dashboard principal -->
+    <a href="#" class="menu-item active " id="dashboard-link" onclick="loadContent('main') ">
+        <div class="menu-icon">
+            <i class="fas fa-tachometer-alt"></i>
+        </div>
+        <div class="menu-text">Dashboard</div>
+    </a>
+    <!-- ususarios-->
+    <a href="#" class="menu-item has-submenu" >
+        <div class="menu-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="menu-text">Usuarios</div>
+        <span class="notification-badge">3</span>
+    </a>
+
+    <div class="submenu">
+        <a href="#" class="submenu-item" onclick="loadContent('usuarios')">
+            <i class="fas fa-list"></i>Lista Usuarios
+        </a>
+        <a href="#" class="submenu-item" onclick="loadContent('usuarios/create')">
+            <i class="fas fa-user-plus"></i>Agregar Usuario
+        </a>
+        <a href="#" class="submenu-item"><i class="fas fa-key"></i>Permisos</a>
+    </div>
+    <!-- Productos -->
+    <a href="#" class="menu-item has-submenu">
+        <div class="menu-icon">
+            <i class="fas fa-box-open"></i>
+        </div>
+        <div class="menu-text">Productos</div>
+        <span class="notification-badge">5</span>
+    </a>
+
+    <div class="submenu">
+        <a href="#" class="submenu-item"><i class="fas fa-list"></i>Lista Productos</a>
+        <a href="#" class="submenu-item" onclick="loadContent('productos/create')">
+            <i class="fas fa-plus"></i>Agregar Producto
+        </a>
+        <a href="#" class="submenu-item"><i class="fas fa-tags"></i>Categorías</a>
+    </div>
+    <!-- Pedidos-->
+    <a href="#" class="menu-item has-submenu">
+        <div class="menu-icon">
+            <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="menu-text">Pedidos</div>
+        <span class="notification-badge">10</span>
+    </a>
+
+    <div class="submenu">
+        <a href="#" class="submenu-item"><i class="fas fa-list"></i>Lista Pedidos</a>
+        <a href="#" class="submenu-item"><i class="fas fa-history"></i>Historial</a>
+        <a href="#" class="submenu-item"><i class="fas fa-exchange-alt"></i>Estados</a>
+        <a href="#" class="submenu-item"><i class="fas fa-undo"></i>Devoluciones</a>
+    </div>
+    <!-- Reportes-->
+    <a href="#" class="menu-item has-submenu">
+        <div class="menu-icon">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="menu-text">Reportes</div>
+    </a>
+    <div class="submenu">
+        <a href="#" class="submenu-item"><i class="fas fa-dollar-sign"></i>Ventas</a>
+        <a href="#" class="submenu-item"><i class="fas fa-user-chart"></i>Usuarios</a>
+        <a href="#" class="submenu-item"><i class="fas fa-cube"></i>Productos</a>
+    </div>
+    <!-- Configuracion-->
+    <a href="#" class="menu-item">
+        <div class="menu-icon">
+            <i class="fas fa-cog"></i>
+        </div>
+        <div class="menu-text">Configuración</div>
+    </a>
+
+    <!-- Cerrar sesión seguro -->
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit" class="menu-item logout-btn" style="background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
+            <div class="menu-icon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="menu-text">Cerrar Sesión</div>
+        </button>
+    </form>
+</nav>

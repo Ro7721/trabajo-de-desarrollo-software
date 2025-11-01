@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Panel izquierdo -->
+        <div class="login-left">
+            <div class="logo">
+                <h1>JURO A</h1>
+                <p>Panel Administrativo</p>
+            </div>
+            <p>Accede al sistema de gestión de tu tienda online.</p>
+            <ul class="features-list">
+                <li><i class="fas fa-users-cog"></i> Gestiona usuarios</li>
+                <li><i class="fas fa-boxes"></i> Controla inventario</li>
+                <li><i class="fas fa-chart-line"></i> Analiza ventas</li>
+                <li><i class="fas fa-shopping-cart"></i> Administra pedidos</li>
+            </ul>
+        </div>
+
+        <!-- Panel derecho -->
+        <div class="login-right">
+            <!-- 🚀 IMPORTANTE: action="@{/login}" y name="username/password" -->
+            <form th:action="@{/login}" method="post" class="login-form">
+                <h2>Iniciar Sesión</h2>
+
+                <!-- Error y logout -->
+                <div th:if="${param.error}">
+                    <p style="color:red;">Usuario o contraseña incorrectos</p>
+                </div>
+                <div th:if="${param.logout}">
+                    <p style="color:green;">Has cerrado sesión exitosamente</p>
+                </div>
+
+                <!-- Usuario -->
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Ingresa tu usuario" required>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required>
+                </div>
+
+                <!-- Botón -->
+                <button type="submit" class="btn">Ingresar al Sistema</button>
+
+                <!-- Footer -->
+                <div class="form-footer">
+                    <p>¿no tienes cuenta?
+                        <a th:href="@{/usuarios/create}">Crear nueva cuenta</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

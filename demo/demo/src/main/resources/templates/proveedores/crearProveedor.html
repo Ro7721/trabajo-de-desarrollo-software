@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nuevo Proveedor - + Mass</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .form-container {
+            background: rgb(218, 211, 234);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-store me-2"></i>+ Mass
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white" href="/proveedores">
+                    <i class="fas fa-arrow-left me-2"></i>Volver a Proveedores
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="form-container">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-truck-loading me-2"></i>Nuevo Proveedor
+                    </h2>
+                    
+                    <form th:action="@{/proveedores/create}" th:object="${proveedor}" method="post">
+                        
+                        <!-- Información Básica -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Nombre del Proveedor *</label>
+                                <input type="text" class="form-control" th:field="*{nombre}" 
+                                       placeholder="Ej: Distribuidora XYZ S.A." required>
+                                <div class="form-text">Nombre completo de la empresa proveedora</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">RUC *</label>
+                                <input type="text" class="form-control" th:field="*{ruc}" 
+                                       placeholder="Ej: 20123456789" required
+                                       pattern="[0-9]{11}" title="El RUC debe tener 11 dígitos">
+                                <div class="form-text">Número de RUC (11 dígitos)</div>
+                            </div>
+                        </div>
+
+                        <!-- Información de Contacto -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Persona de Contacto</label>
+                                <input type="text" class="form-control" th:field="*{contacto}" 
+                                       placeholder="Ej: Juan Pérez">
+                                <div class="form-text">Nombre de la persona de contacto</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Teléfono</label>
+                                <input type="tel" class="form-control" th:field="*{telefono}" 
+                                       placeholder="Ej: 987654321">
+                                <div class="form-text">Número de teléfono principal</div>
+                            </div>
+                        </div>
+
+                        <!-- Información de Ubicación -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" th:field="*{email}" 
+                                   placeholder="Ej: contacto@proveedor.com">
+                            <div class="form-text">Correo electrónico de contacto</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Dirección</label>
+                            <textarea class="form-control" th:field="*{direccion}" 
+                                      rows="3" placeholder="Dirección completa del proveedor..."></textarea>
+                            <div class="form-text">Dirección fiscal y/o de entrega</div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/proveedores" class="btn btn-outline-secondary me-md-2">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Guardar Proveedor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Validación de RUC en tiempo real
+        document.addEventListener('DOMContentLoaded', function() {
+            const rucInput = document.querySelector('input[th\\:field="*{ruc}"]');
+            
+            if (rucInput) {
+                rucInput.addEventListener('input', function() {
+                    // Remover caracteres no numéricos
+                    this.value = this.value.replace(/\D/g, '');
+                    
+                    // Limitar a 11 dígitos
+                    if (this.value.length > 11) {
+                        this.value = this.value.slice(0, 11);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estilo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title> JURO A | Saga Falabella Style</title>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">JURO A</div>
+        <div class="logo-icon">
+            <img src="img/logo.png" alt="">
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Busca productos, marcas y más...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-actions">
+            <a href="/cuenta"><i class="fas fa-user"></i> Mi Cuenta</a>
+            <a href="/carrito"><i class="fas fa-shopping-cart"></i> Carrito</a>
+        </div>
+    </header>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="menu-container">
+            <div class="menu-icon"><i class=" fa-box-open"></i></div>
+            <div class="menu-text">Categorías</div>
+        </div>
+      <a href="/inicio" onmouseover="moveSpan(0)">Inicio</a>
+      <a href="/ofertas" onmouseover="moveSpan(1)">Ofertas</a>
+      <a href="/Electro" onmouseover="moveSpan(2)">Electrodomisticos</a>
+      <a href="/moda" onmouseover="moveSpan(3)">Moda</a>
+      <a href="/hogar" onmouseover="moveSpan(4)">Hogar</a>
+      <span id="indicator"></span>
+    </nav>
+    <!-- Main Content -->
+     <!-- contenedor de de productos en exibicion -->
+    <div class="main-container">
+        <section class="hero-banner">
+            <h2>¡GRANDES DESCUENTOS DE TEMPORADA!</h2>
+            <p>Hasta 50% OFF en miles de productos seleccionados. Solo por esta semana.</p>
+            <a href="#" class="btn-primary">Ver Ofertas</a>
+        </section>
+
+        <section class="featured-grid">
+            <h3>Categorías Destacadas</h3>
+            <div class="grid-container">
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/300x200?text=Electro" alt="Electro">
+                    <h4>Tecnología</h4>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/300x200?text=Moda" alt="Moda">
+                    <h4>Ropa y Calzado</h4>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/300x200?text=Hogar" alt="Hogar">
+                    <h4>Decoración</h4>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Mi Tienda. Todos los derechos reservados.</p>
+    </footer>
+</body>
+<script>
+    function moveSpan(index) {
+        const span = document.getElementById("indicator");
+        const links = document.querySelectorAll(".navbar a");
+        
+        // Calculate the left position based on the clicked link's offset
+        if (links[index]) {
+            span.style.width = links[index].offsetWidth + "px";
+            span.style.left = links[index].offsetLeft + "px";
+        }
+    }
+
+    // Initialize span position on page load (sets it to the 'Inicio' link)
+    window.onload = function() {
+        moveSpan(0); 
+    };
+</script>
+</html>

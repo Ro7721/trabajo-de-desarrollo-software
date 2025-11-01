@@ -1,0 +1,101 @@
+  
+.navbar {
+      background: #1a1a1a;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .navbar-brand img {
+      height: 40px;
+      border-radius: 8px;
+      margin-left: 8px;
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      transition: color 0.3s;
+    }
+
+    .navbar-nav .nav-link:hover,
+    .dropdown-menu a:hover {
+      color: #0d6efd !important;
+    }
+
+    .dropdown-menu {
+      border-radius: 8px;
+      border: none;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+      animation: fadeDown 0.3s ease-in-out;
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Hero */
+    .hero {
+      background: url("https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1350&q=80") no-repeat center center/cover;
+      color: white;
+      text-align: center;
+      padding: 120px 20px;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+    }
+
+    /* Productos */
+    .product-card img {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Footer */
+    footer {
+      background: #1a1a1a;
+      color: #ccc;
+    }
+
+    footer a {
+      color: #ccc;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: #0d6efd;
+    }

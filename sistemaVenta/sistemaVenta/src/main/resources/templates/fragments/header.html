@@ -1,0 +1,12 @@
+<div class="header" th:fragment="header">
+    <h1>Dashboard del Administrador</h1>
+    <div class="user-info">
+        <div class="user-details">
+            <!-- ✅ VERSIÓN SEGURA: Usa los datos del modelo -->
+            <div class="user-name" th:text="${nombreUsuario}">Usuario</div>
+            <div class="user-role" th:text="${rolUsuario}">Administrador</div>
+        </div>
+        <!-- ✅ VERSIÓN SEGURA: Usa las iniciales del modelo -->
+        <div class="user-avatar" th:text="${inicialesUsuario}">AU</div>
+    </div>
+</div>

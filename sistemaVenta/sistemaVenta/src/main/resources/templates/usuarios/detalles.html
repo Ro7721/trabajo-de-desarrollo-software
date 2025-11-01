@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+    <div class="form-container" th:fragment="content">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-circle me-2"></i> Detalles del Usuario
+                </h5>
+                <button class="btn btn-light btn-sm btn-volver">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+            </div>
+            
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="fw-bold">Usuario:</label>
+                        <p class="form-control-plaintext" th:text="${usuario.nombreUsuario}"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold">Nombre Completo:</label>
+                        <p class="form-control-plaintext" th:text="${usuario.nombreCompleto}"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold">DNI:</label>
+                        <p class="form-control-plaintext" th:text="${usuario.nroDocumento}"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold">Sexo:</label>
+                        <p class="form-control-plaintext" th:text="${usuario.sexoDisplay}"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold">Edad:</label>
+                        <p class="form-control-plaintext" th:text="${usuario.edad} + ' años'"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold">Rol:</label>
+                        <p class="form-control-plaintext">
+                            <!-- ✅ CORREGIDO: Sintaxis correcta de Thymeleaf -->
+                            <span class="badge" 
+                                  th:classappend="${usuario.rol == 'ADMINISTRADOR'} ? 'bg-danger' : 
+                                                 (${usuario.rol == 'VENDEDOR'} ? 'bg-primary' : 
+                                                 (${usuario.rol == 'ALMACENERO'} ? 'bg-warning' : 'bg-secondary'))"
+                                  th:text="${usuario.rol}">
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold">Estado:</label>
+                        <p class="form-control-plaintext">
+                            <span th:classappend="${usuario.activo} ? 'badge bg-success' : 'badge bg-danger'"
+                                th:text="${usuario.activo} ? 'Activo' : 'Inactivo'"></span>
+                        </p>
+                    </div>
+
+                    <!-- Comenta temporalmente estos campos si no existen en tu DTO -->
+                    <!--
+                    <div class="col-md-6">
+                        <label class="fw-bold">Fecha Registro:</label>
+                        <p class="form-control-plaintext" 
+                           th:text="${usuario.fechaRegistro != null} ? 
+                                   ${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy HH:mm')} : 
+                                   'No disponible'"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold">Último Acceso:</label>
+                        <p class="form-control-plaintext" 
+                           th:text="${usuario.ultimoAcceso != null} ? 
+                                   ${#temporals.format(usuario.ultimoAcceso, 'dd/MM/yyyy HH:mm')} : 
+                                   'No ha accedido'"></p>
+                    </div>
+                    -->
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="card-footer bg-transparent">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <button th:if="${usuario.activo}" 
+                                class="btn btn-outline-danger btn-sm btn-desactivar"
+                                th:attr="data-id=${usuario.id}">
+                            <i class="fas fa-user-slash me-1"></i> Desactivar
+                        </button>
+                        <button th:if="${!usuario.activo}" 
+                                class="btn btn-outline-success btn-sm btn-activar"
+                                th:attr="data-id=${usuario.id}">
+                            <i class="fas fa-user-check me-1"></i> Activar
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm btn-editar"
+                                th:attr="data-id=${usuario.id}">
+                            <i class="fas fa-edit me-1"></i> Editar Usuario
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

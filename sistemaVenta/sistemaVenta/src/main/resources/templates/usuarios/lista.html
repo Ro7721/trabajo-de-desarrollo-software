@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div class="container-fluid py-4" th:fragment="content">
+        <!-- Aquie va el mensaje de exito-->
+        <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${mensaje}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-users me-2"></i>Gestión de Usuarios</h2>
+            <button class="btn btn-primary btn-nuevo-usuario" 
+                    data-url="/dashboard/usuarios/create">
+                <i class="fas fa-user-plus me-2"></i>Nuevo Usuario
+            </button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Lista de Usuarios</h5>
+            </div>
+            <!-- Buscador mejorado -->
+            <div class="input-group mb-4 w-50 mx-auto">
+                <input type="text" id="searchInput" class="form-control border-primary" placeholder="Buscar por nombre, DNI o usuario..." onkeyup="filterTable()">
+                <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped" id="usersTable">
+                        <div class="no-results text-center mt-3" id="noResults" style="display:none;">
+                            <i class="fas fa-exclamation-circle me-2"></i>No se encontraron usuarios que coincidan con la búsqueda
+                        </div>
+                        <thead class="table-light">
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Nombre Completo</th>
+                                <th>DNI</th>
+                                <th>Sexo</th>
+                                <th>Edad</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="usuario : ${usuarios}">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-3">
+                                            <span th:text="${usuario.nombre.substring(0,1) + usuario.apellido.substring(0,1)}"></span>
+                                        </div>
+                                        <span th:text="${usuario.nombreUsuario}"></span>
+                                    </div>
+                                </td>
+                                <td th:text="${usuario.nombreCompleto}"></td>
+                                <td th:text="${usuario.nroDocumento}"></td>
+                                <td>
+                                    <span th:if="${usuario.sexo == 'Masculino'}">
+                                        <i class="fas fa-male text-primary"></i> Masculino
+                                    </span>
+                                    <span th:if="${usuario.sexo == 'Femenino'}">
+                                        <i class="fas fa-female text-danger"></i> Femenino
+                                    </span>
+                                </td>
+                                <td th:text="${usuario.edad} + ' años'"></td>
+                                <td>
+                                    <span th:class="${usuario.activo} ? 'status-badge status-active' : 'status-badge status-inactive'"
+                                          th:text="${usuario.activo} ? 'Activo' : 'Inactivo'">
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        
+                                        <button class="btn btn-outline-info btn-view" 
+                                                data-url="/dashboard/usuarios/view/" 
+                                                th:attr="data-id=${usuario.id}" 
+                                                title="Ver detalles">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+
+                                        <button class="btn btn-outline-warning btn-editar" 
+                                                data-url="/dashboard/usuarios/edit/"
+                                                th:attr="data-id=${usuario.id}" 
+                                                title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        
+                                        <!-- ✅ CORREGIDO: Usar button en lugar de anchor -->
+                                        <button class="btn btn-outline-danger btn-eliminar"
+                                                data-url="/usuarios/delete/"
+                                                th:attr="data-id=${usuario.id}"
+                                                title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function filterTable() {
+        var input = document.getElementById('searchInput');
+        var filter = input.value.toLowerCase();
+        var table = document.getElementById('usersTable');
+        var trs = table.getElementsByTagName('tr');
+        var found = false;
+        for (var i = 1; i < trs.length; i++) { // Empieza en 1 para saltar el header
+            var tds = trs[i].getElementsByTagName('td');
+            var rowText = '';
+            for (var j = 0; j < tds.length; j++) {
+                rowText += tds[j].textContent.toLowerCase() + ' ';
+            }
+            if (rowText.indexOf(filter) > -1) {
+                trs[i].style.display = '';
+                found = true;
+            } else {
+                trs[i].style.display = 'none';
+            }
+        }
+        document.getElementById('noResults').style.display = found ? 'none' : '';
+    }
+    </script>
+</body>
+</html>

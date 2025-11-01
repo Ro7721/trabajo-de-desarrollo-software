@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div class="form-container" th:fragment="content">
+        <div class="form-header">
+            <i class="fas fa-box fa-2x mb-2" style="color: #1a3c6d;"></i>
+            <h2>Crear Nuevo Producto</h2>
+            <p class="form-subtitle">Complete la información para registrar un nuevo producto</p>
+        </div>
+
+        <form method="post" th:action="@{/productos/create}" th:object="${productoDto}" enctype="multipart/form-data">
+            <h3 class="section-title">Información General</h3>
+
+            <div class="mb-3">
+                <label class="form-label required">Descripción</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-align-left"></i>
+                    <input type="text" class="form-control" th:field="*{description}" placeholder="Ingrese la descripción" required>
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Categoría</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-tags"></i>
+                    <select class="form-select" th:field="*{category}" id="category">
+                        <option value="">Seleccione una categoría</option>
+                        <option th:each="category : ${categorias}"
+                                th:value="${category.name()}"
+                                th:text="${category}">
+                        </option>
+                    </select>
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" th:classappend="${productoDto.category == 'Producto Visual'} ? 'required' : ''">Imagen</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-image"></i>
+                    <input type="file" class="form-control" id="imageFile" accept="image/png,image/jpeg,image/gif" th:field="*{fileImage}" th:required="${productoDto.category == 'Producto Visual'}">
+                </div>
+                <img id="imagePreview" class="image-preview" alt="Vista previa de la imagen">
+                <div class="text-danger" th:if="${#fields.hasErrors('fileImage')}" th:errors="*{fileImage}"></div>
+            </div>
+
+            <h3 class="section-title">Detalles de Inventario</h3>
+
+            <div class="mb-3">
+                <label class="form-label required">Unidad de Medida</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-ruler"></i>
+                    <select class="form-control" th:field="*{unidad}">
+                        <option value="">Seleccione una unidad</option>
+                        <option value="kg">Kilogramos (kg)</option>
+                        <option value="litros">Litros</option>
+                        <option value="unidades">Unidades</option>
+                    </select>
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('unidad')}" th:errors="*{unidad}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label required">Stock Disponible</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-boxes"></i>
+                    <input type="number" class="form-control" th:field="*{stockAviable}" placeholder="Ingrese el stock disponible" required step="0.01">
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('stockAviable')}" th:errors="*{stockAviable}"></div>
+            </div>
+
+            <h3 class="section-title">Precios</h3>
+
+            <div class="mb-3">
+                <label class="form-label required">Precio de Compra</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                    <input type="number" class="form-control" th:field="*{purchesePrice}" placeholder="Ingrese el precio de compra" required step="0.01">
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('purchesePrice')}" th:errors="*{purchesePrice}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label required">Precio de Venta</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                    <input type="number" class="form-control" th:field="*{salePrice}" placeholder="Ingrese el precio de venta" required step="0.01">
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('salePrice')}" th:errors="*{salePrice}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label required">Precio Unitario</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                    <input type="number" class="form-control" th:field="*{unitPrice}" placeholder="Ingrese el precio unitario" required step="0.01">
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('unitPrice')}" th:errors="*{unitPrice}"></div>
+            </div>
+
+            <div class="form-actions d-flex justify-content-end gap-2">
+                <a th:href="@{/dashboard}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Guardar Producto
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

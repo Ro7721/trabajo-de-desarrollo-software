@@ -1,0 +1,69 @@
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+.search-container{
+    max-width: 420px;
+    position: relative;
+    left: 500px;
+}
+.form-input{
+    max-width: 400px;
+}
+.search-container .input-group{
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgb(0, 0, 0, 0.05);
+    background-color: rgb(157, 164, 228);
+    transition: box-shadow 0.2s ease;
+}
+.search-container .input-group:focus-within{
+    box-shadow: 0 4px 12px rgba(23, 232, 117, 0.1);
+}
+.search-container .container-control{
+    border-color: #667eea;
+    border-radius: 12px;
+    padding: 0.75rem 6rem;
+    font-size: 0.9rem;
+}
+.table {
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.table thead th:first-child {
+    border-top-left-radius: 16px;
+}
+.table thead th:last-child {
+    border-top-right-radius: 16px;
+}
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 16px;
+}
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 16px;
+}
+
+/* Filas de colores intercalados */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f6f8fc;
+}
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #e9eaf3;
+}
+.status-active { background: #d4edda; color: #155724; }
+.status-inactive { background: #f8d7da; color: #721c24; }
