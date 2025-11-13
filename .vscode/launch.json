@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ApirsDs2025Application<apirsDS2025>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.epiis.apirsDS2025.ApirsDs2025Application",
+            "projectName": "apirsDS2025",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
