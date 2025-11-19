@@ -32,4 +32,6 @@ public interface ProductoRepository extends JpaRepository<Producto, String> {
     // Buscar productos con stock bajo
     @Query("SELECT p FROM Producto p WHERE p.stockAviable < :stockLimit")
     List<Producto> findLowStock(@Param("stockLimit") double stockLimit);
+    // metodo para validar stock
+    
 }

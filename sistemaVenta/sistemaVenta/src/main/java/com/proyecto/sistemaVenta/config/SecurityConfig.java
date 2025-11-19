@@ -24,13 +24,13 @@ public class SecurityConfig {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ FORMA CORRECTA: Usar AuthenticationConfiguration
+    //  FORMA CORRECTA: Usar AuthenticationConfiguration
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
-    // ✅ AuthenticationProvider explícito
+    //  AuthenticationProvider explícito
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

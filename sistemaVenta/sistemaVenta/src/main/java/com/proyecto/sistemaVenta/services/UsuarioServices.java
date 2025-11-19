@@ -215,6 +215,7 @@ public class UsuarioServices {
     // Método para cambiar estado de usuario
     @Transactional
     public void cambiarEstadoUsuario(Long id, String estado) {
+        
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + id));
         
