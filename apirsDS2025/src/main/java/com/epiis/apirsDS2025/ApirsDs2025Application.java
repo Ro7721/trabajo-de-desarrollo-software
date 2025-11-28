@@ -9,5 +9,4 @@ public class ApirsDs2025Application {
 	public static void main(String[] args) {
 		SpringApplication.run(ApirsDs2025Application.class, args);
 	}
-
 }
