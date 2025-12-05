@@ -27,32 +27,41 @@
     <h1 class="text-center mb-3">Listado de Productos</h1>
     <p class="text-center text-muted">Tu tienda de confianza para productos de calidad.</p>
     <!-- BARRA de busqueda productos-->
-     <div class="card mb-4">
+    <div class="card mb-4">
       <div class="card-body">
         <form class="d-flex" th:action="@{/productos/search}" method="get">
-          <input class="form-control me-2" type="search" name="nombre" placeholder="Buscar producto por nombre" aria-label="Search" required>
+          <input class="form-control me-2" type="search" name="nombre" placeholder="Buscar producto por nombre"
+            aria-label="Search" required>
           <button class="btn btn-outline-primary" type="submit">
             <i class="fas fa-search me-2"></i>Buscar
           </button>
         </form>
       </div>
 
-     </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="stats-card">
+          <div class="stats-number" th:text="${totalProductos}">0</div>
+          <div class="stats-label">Total Productos</div>
+        </div>
+      </div>
+    </div>
     <!-- Botón crear -->
     <div class="d-flex justify-content-end mb-3">
       <a class="btn btn-primary" href="/productos/create">➕ Agregar Producto</a>
     </div>
     <!-- Agrega esto después del título y antes de la tabla -->
     <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle me-2"></i>
-        <span th:text="${param.success}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <i class="fas fa-check-circle me-2"></i>
+      <span th:text="${param.success}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
     <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="fas fa-exclamation-circle me-2"></i>
-        <span th:text="${param.error}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <i class="fas fa-exclamation-circle me-2"></i>
+      <span th:text="${param.error}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <!-- TABLA SIMPLIFICADA -->
     <div class="table-responsive">
@@ -76,7 +85,7 @@
               <a href="/productos/create" class="btn btn-primary">Agregar Primer Producto</a>
             </td>
           </tr>
-          
+
           <!-- Lista de productos - VERSIÓN SIMPLIFICADA -->
           <tr th:each="producto : ${productos}">
             <td th:text="${producto.id}"></td>
@@ -87,7 +96,8 @@
             <td>
               <!-- EXPRESIÓN MÁS SIMPLE -->
               <span th:if="${producto.stock > 10}" class="badge bg-success" th:text="${producto.stock} + ' und'"></span>
-              <span th:if="${producto.stock <= 10 and producto.stock > 0}" class="badge bg-warning" th:text="${producto.stock} + ' und'"></span>
+              <span th:if="${producto.stock <= 10 and producto.stock > 0}" class="badge bg-warning"
+                th:text="${producto.stock} + ' und'"></span>
               <span th:if="${producto.stock == 0}" class="badge bg-danger">Agotado</span>
             </td>
             <td class="text-center">
@@ -108,4 +118,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

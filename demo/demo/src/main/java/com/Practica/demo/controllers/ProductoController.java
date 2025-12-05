@@ -23,18 +23,19 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
-    
+
     @Autowired
     private ProductoRepository productoRepository;
-    
+
     // ✅ Lista de productos
-    @GetMapping({"", "/"})
+    @GetMapping({ "", "/" })
     public String listarProductos(Model model) {
         List<Producto> productos = productoRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productoRepository.count());
         return "productos/index";
     }
-    
+
     // ✅ MOSTRAR formulario de creación
     @GetMapping("/create")
     public String mostrarFormularioCreacion(Model model) {
@@ -42,18 +43,18 @@ public class ProductoController {
         model.addAttribute("productoDto", productoDto);
         return "productos/crearProducto";
     }
-    
+
     // ✅ PROCESAR formulario de creación
     @PostMapping("/create")
-    public String crearProducto(@Valid @ModelAttribute("productoDto") ProductoDto productoDto, 
-                               BindingResult result, 
-                               Model model) {
-        
+    public String crearProducto(@Valid @ModelAttribute("productoDto") ProductoDto productoDto,
+            BindingResult result,
+            Model model) {
+
         if (result.hasErrors()) {
             model.addAttribute("productoDto", productoDto);
             return "productos/crearProducto";
         }
-        
+
         // Convertir ProductoDto a Producto
         Producto producto = new Producto();
         producto.setNombre(productoDto.getNombre());
@@ -62,7 +63,7 @@ public class ProductoController {
         producto.setMarca(productoDto.getMarca());
         producto.setPrecio(productoDto.getPrecio());
         producto.setStock(productoDto.getStock());
-        
+
         // ✅ Guardar imagen si se subió
         if (productoDto.getImagen() != null && !productoDto.getImagen().isEmpty()) {
             try {
@@ -81,17 +82,18 @@ public class ProductoController {
         } else {
             producto.setImagen("/images/default-product.png");
         }
-            
+
         productoRepository.save(producto);
         return "redirect:/productos";
     }
+
     // FILTRAR por categoria
     @GetMapping("/filter")
     public String filtrarPorCategoria(@ModelAttribute("categoria") String categoria, Model model) {
         if (categoria == null || categoria.trim().isEmpty()) {
             return "redirect:/productos";
         }
-        
+
         List<Producto> productos = productoRepository.findByCategoria(categoria);
         if (productos != null && !productos.isEmpty()) {
             model.addAttribute("productos", productos);
@@ -101,6 +103,7 @@ public class ProductoController {
         }
         return "productos/index";
     }
+
     // ✅ MOSTRAR formulario de EDICIÓN
     @GetMapping("/edit/{id}")
     public String mostrarFormularioEdicion(@PathVariable("id") Long id, Model model) {
@@ -109,7 +112,7 @@ public class ProductoController {
             if (productoOpt.isPresent()) {
                 Producto producto = productoOpt.get();
                 ProductoDto productoDto = new ProductoDto();
-                
+
                 // Copiar datos del producto al DTO
                 productoDto.setNombre(producto.getNombre());
                 productoDto.setDescripcion(producto.getDescripcion());
@@ -117,7 +120,7 @@ public class ProductoController {
                 productoDto.setMarca(producto.getMarca());
                 productoDto.setPrecio(producto.getPrecio());
                 productoDto.setStock(producto.getStock());
-                
+
                 model.addAttribute("productoDto", productoDto);
                 model.addAttribute("productoId", id);
                 return "productos/editarProducto";
@@ -128,25 +131,25 @@ public class ProductoController {
             return "redirect:/productos?error=Error+al+cargar+producto";
         }
     }
-    
+
     // ✅ PROCESAR formulario de EDICIÓN
     @PostMapping("/edit/{id}")
     public String actualizarProducto(@PathVariable("id") Long id,
-                                    @Valid @ModelAttribute("productoDto") ProductoDto productoDto,
-                                    BindingResult result,
-                                    Model model) {
-        
+            @Valid @ModelAttribute("productoDto") ProductoDto productoDto,
+            BindingResult result,
+            Model model) {
+
         if (result.hasErrors()) {
             model.addAttribute("productoDto", productoDto);
             model.addAttribute("productoId", id);
             return "productos/editarProducto";
         }
-        
+
         try {
             Optional<Producto> productoOpt = productoRepository.findById(id.intValue());
             if (productoOpt.isPresent()) {
                 Producto producto = productoOpt.get();
-                
+
                 // Actualizar datos del producto
                 producto.setNombre(productoDto.getNombre());
                 producto.setDescripcion(productoDto.getDescripcion());
@@ -154,7 +157,7 @@ public class ProductoController {
                 producto.setMarca(productoDto.getMarca());
                 producto.setPrecio(productoDto.getPrecio());
                 producto.setStock(productoDto.getStock());
-                
+
                 productoRepository.save(producto);
                 return "redirect:/productos?success=Producto+actualizado+correctamente";
             } else {
@@ -164,13 +167,14 @@ public class ProductoController {
             return "redirect:/productos?error=Error+al+actualizar+producto";
         }
     }
+
     // Buscar producto por nombre
     @GetMapping("/search")
     public String buscarProducto(@ModelAttribute("nombre") String nombre, Model model) {
         if (nombre == null || nombre.trim().isEmpty()) {
             return "redirect:/productos";
         }
-        
+
         List<Producto> productos = productoRepository.findByNombreContainingIgnoreCase(nombre);
         if (productos != null && !productos.isEmpty()) {
             model.addAttribute("productos", productos);
