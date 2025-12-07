@@ -1,37 +1,23 @@
-  import { useState } from "react";
-  function App(){
-    const [tarea, setTarea] = useState("");
-    const [tareas, setTareas] = useState([]);
+import React from "react";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/layout/Navbar";
+import Home from "./components/page/Home";
+import EditUserModal from "./components/page/EditUserModal";
+import AddUser from "./users/AddUser";
+function App() {
+  return (
+    <div className="App">
 
-    const agregarTarea = () => {
-      if(tarea.trim() ===""){
-        return;
-      }
-      setTareas([...tareas, tarea]);
-      setTarea("");
-    }
-    return(
-      <div style={{textAlign: "center", marginTop: "50px"}}>
-        <input
-        type="text"
-        placeholder="Escribe una tarea"
-        value={tarea}
-        onChange={(e) => setTarea(e.target.value)}
-        style={{padding: "8px", fontSize: "16px", width: "250px"}}
-        />
-        <button
-        onClick={agregarTarea}
-        style={{marginLeft: "10px", padding: "8px 10px"}}
-        >Agregar</button>
-
-        <ul style={{listStyleType: "none", marginTop: "20px"}}>
-          {tareas.map((t, index) => (
-            <li key={index} style={{marginTop: "10px"}}>
-              {t}
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
-  }
-  export default App;
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/addUser" element={<AddUser />} />
+          <Route path="/editUser/:id" element={<EditUserModal />} />
+        </Routes>
+      </Router>
+    </div>
+  );
+}
+export default App;

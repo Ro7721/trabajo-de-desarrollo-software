@@ -70,6 +70,9 @@ public class CompraService {
     }
 
     public Optional<CompraProveedor> obtenerCompraPorId(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("El ID no puede ser nulo");
+        }
         return compraRepository.findById(id);
     }
 

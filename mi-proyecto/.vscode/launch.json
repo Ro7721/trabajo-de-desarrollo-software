@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ReactspringApplication<reactspring>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "epiis.miproyecto.reactspring.ReactspringApplication",
+            "projectName": "reactspring",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

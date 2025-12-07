@@ -26,32 +26,35 @@ import jakarta.validation.Valid;
 public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
-    
-    @GetMapping({"", "/"})
-    public String listarClientes(Model model){
+
+    @GetMapping({ "", "/" })
+    public String listarClientes(Model model) {
         List<Cliente> clientes = clienteRepository.findAll(Sort.by(Sort.Direction.DESC, "fechaRegistro"));
         model.addAttribute("clientes", clientes);
         model.addAttribute("totalClientes", clienteRepository.count());
         return "clientes/index";
     }
-    //Mostrar fromulario de creacion
+
+    // Mostrar fromulario de creacion
     @GetMapping("/create")
-    public String mostrarFormularioCreacion(Model model){
+    public String mostrarFormularioCreacion(Model model) {
         ClienteDto clienteDto = new ClienteDto();
         model.addAttribute("clienteDto", clienteDto);
         return "clientes/crearCliente";
     }
+
     // Procesar formulario de creación
     @PostMapping("/create")
-    public String crearCliente(@Valid @ModelAttribute("clienteDto") ClienteDto clienteDto, 
-                               BindingResult result, 
-                               Model model) {
+    public String crearCliente(@Valid @ModelAttribute("clienteDto") ClienteDto clienteDto,
+            BindingResult result,
+            Model model) {
         // validar si el email existe
-        if(clienteRepository.findByEmail(clienteDto.getEmail()).isPresent()){
+        if (clienteRepository.findByEmail(clienteDto.getEmail()).isPresent()) {
             result.rejectValue("email", "error.clienteDto", "El email ya esta registrado");
-        }  
-        //validar si el DNI ya existe
-        if(clienteDto.getDni() != null && !clienteDto.getDni().isEmpty() && clienteRepository.findByDni(clienteDto.getDni()).isPresent()){
+        }
+        // validar si el DNI ya existe
+        if (clienteDto.getDni() != null && !clienteDto.getDni().isEmpty()
+                && clienteRepository.findByDni(clienteDto.getDni()).isPresent()) {
             result.rejectValue("dni", "error.clientDto", "El DNI ya esta registrado");
         }
 
@@ -73,6 +76,7 @@ public class ClienteController {
     }
 
     // Mostrar formulario de edición
+
     @GetMapping("/edit/{id}")
     public String mostrarFormularioEdicion(@PathVariable("id") Long id, Model model) {
         try {
@@ -104,23 +108,23 @@ public class ClienteController {
     // Procesar formulario de edición
     @PostMapping("/edit/{id}")
     public String actualizarCliente(@PathVariable("id") Long id,
-                                    @Valid @ModelAttribute("clienteDto") ClienteDto clienteDto,
-                                    BindingResult result,
-                                    Model model,
-                                    @ModelAttribute("emailOriginal") String emailOriginal,
-                                    @ModelAttribute("dniOriginal") String dniOriginal) {
+            @Valid @ModelAttribute("clienteDto") ClienteDto clienteDto,
+            BindingResult result,
+            Model model,
+            @ModelAttribute("emailOriginal") String emailOriginal,
+            @ModelAttribute("dniOriginal") String dniOriginal) {
         // Validar si el email ya existe (excluyendo el actual)
-        if (!clienteDto.getEmail().equals(emailOriginal) && 
-            clienteRepository.findByEmail(clienteDto.getEmail()).isPresent()) {
+        if (!clienteDto.getEmail().equals(emailOriginal) &&
+                clienteRepository.findByEmail(clienteDto.getEmail()).isPresent()) {
             result.rejectValue("email", "error.clienteDto", "El email ya está registrado");
         }
-        
+
         // Validar si el DNI ya existe (excluyendo el actual)
-        if (clienteDto.getDni() != null && !clienteDto.getDni().isEmpty() && 
-            !clienteDto.getDni().equals(dniOriginal) && 
-            clienteRepository.findByDni(clienteDto.getDni()).isPresent()) {
+        if (clienteDto.getDni() != null && !clienteDto.getDni().isEmpty() &&
+                !clienteDto.getDni().equals(dniOriginal) &&
+                clienteRepository.findByDni(clienteDto.getDni()).isPresent()) {
             result.rejectValue("dni", "error.clienteDto", "El DNI ya está registrado");
-        }                                
+        }
         if (result.hasErrors()) {
             model.addAttribute("clienteDto", clienteDto);
             model.addAttribute("clienteId", id);
@@ -166,13 +170,14 @@ public class ClienteController {
             return "redirect:/clientes?error=Error+al+eliminar+cliente";
         }
     }
-    // BUSCAR  clientes
+
+    // BUSCAR clientes
     @GetMapping("/search")
     public String buscarClientes(@RequestParam("q") String query, Model model) {
         List<Cliente> clientes = clienteRepository
-            .findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCase(query, query);
-        //buscar por dni
-        
+                .findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCase(query, query);
+        // buscar por dni
+
         model.addAttribute("clientes", clientes);
         model.addAttribute("query", query);
         return "clientes/index";
