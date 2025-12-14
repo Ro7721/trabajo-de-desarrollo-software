@@ -1,0 +1,37 @@
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Header from '../layout/Header';
+import Sidebar from '../layout/Sidebar';
+import Footer from '../layout/Footer';
+import DashboardCard from '../components/DashboardCard';
+import '../css/dashboard/dashboardcard.css';
+const Dashboard = () => {
+    return (
+        <div className="flex min-h-screen">
+
+            {/* SIDEBAR */}
+            <Sidebar />
+
+            {/* CONTENIDO */}
+            <div className="flex flex-col flex-1 ml-64">
+
+                <Header />
+
+                <main className="flex-1 p-6 bg-gray-100">
+                    <Routes>
+                        <Route index element={<DashboardCard />} />
+                        <Route path="productos/agregar" element={<h1>Agregar Producto</h1>} />
+                        <Route path="productos/listar" element={<h1>Listar Productos</h1>} />
+                        <Route path="ventas/listar" element={<h1>Ventas</h1>} />
+                        <Route path="reportes/listar" element={<h1>Reportes</h1>} />
+                    </Routes>
+                </main>
+
+                <Footer />
+
+            </div>
+        </div>
+    );
+};
+
+export default Dashboard;

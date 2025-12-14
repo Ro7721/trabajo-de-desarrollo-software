@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import epiis.miproyecto.reactspring.dto.CategoryDto;
 import epiis.miproyecto.reactspring.dto.ProductDto;
 import epiis.miproyecto.reactspring.model.Category;
 import epiis.miproyecto.reactspring.model.Product;
@@ -35,7 +36,10 @@ public class ProductService {
         product.setStock(productDto.getStock());
         product.setSku(productDto.getSku());
         product.setImageUrl(productDto.getImageUrl());
-        product.setCategory(categoryRepository.findById(productDto.getCategoryId()).get());
+        if (productDto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(productDto.getCategoryId()).orElse(null);
+            product.setCategory(category);
+        }
         product.setFeatured(productDto.isFeatured());
         product.setRating(productDto.getRating());
         product.setReviewCount(productDto.getReviewCount());
@@ -105,7 +109,7 @@ public class ProductService {
 
         if (search != null && !search.isEmpty()) {
             spec = spec.and((root, query, cb) -> cb.or(
-                    cb.like(cb.lower(root.get("name")), "%" + search.toLowerCase() + "%"),
+                    cb.like(cb.lower(root.get("name")), "%" +  search.toLowerCase() + "%"),
                     cb.like(cb.lower(root.get("description")), "%" + search.toLowerCase() + "%")));
         }
         if (category != null && !category.isEmpty()) {
@@ -127,5 +131,15 @@ public class ProductService {
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
+    }
+
+    public Category creaCategory(CategoryDto dto) {
+        Category category = new Category();
+        category.setId(dto.getId());
+        category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
+        category.setImageUrl(dto.getImageUrl());
+        category.setProducts(getAllProducts());
+        return categoryRepository.save(category);
     }
 }
