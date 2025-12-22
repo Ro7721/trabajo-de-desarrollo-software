@@ -11,7 +11,8 @@ import {
     faPlus,
     faList,
     faPen,
-    faRightFromBracket
+    faRightFromBracket,
+    faCog
 } from '@fortawesome/free-solid-svg-icons';
 import '../css/dashboard/sidebar.css';
 const Sidebar = () => {
@@ -26,7 +27,7 @@ const Sidebar = () => {
 
             {/* LOGO */}
             <div className="flex items-center gap-3 p-4 border-b border-gray-700">
-                <img src="../public/roger.jpeg" alt="Logo" />
+                <img src="../img/roger.jpeg" alt="Logo" />
                 <h1 className="font-bold">SAGA FALABELLA</h1>
             </div>
 
@@ -111,7 +112,15 @@ const Sidebar = () => {
                     <NavLink to="/reportes/agregar"><FontAwesomeIcon icon={faPlus} /> Agregar</NavLink>
                     <NavLink to="/reportes/listar"><FontAwesomeIcon icon={faList} /> Listar</NavLink>
                 </div>
-
+                {/* CONFIGURACIONES */}
+                <button className={`menu-item ${openMenu === 'configuraciones' ? 'active' : ''}`} onClick={() => toggleMenu('configuraciones')}>
+                    <FontAwesomeIcon icon={faCog} />
+                    <span>Configuraciones</span>
+                    <FontAwesomeIcon
+                        icon={faChevronDown}
+                        className={`ml-auto transition-transform ${openMenu === 'configuraciones' ? 'rotate-180' : ''}`}
+                    />
+                </button>
                 {/* SALIR */}
                 <button className="menu-item text-red-400 mt-6">
                     <FontAwesomeIcon icon={faRightFromBracket} />

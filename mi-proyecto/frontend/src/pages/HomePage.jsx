@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { getProducts, getCategories } from '../services/ProductService';
 import ProductCard from '../components/ProductCard';
-import { Search, Filter, ShoppingCart, Menu, ChevronDown } from 'lucide-react';
+import { Search, Filter, ShoppingCart, Menu, ChevronDown, X } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-
+import CreateUser from '../components/usuarios/CreateUser';
+import { Link, Links } from 'react-router-dom';
 const HomePage = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openAccount, setOpenAccount] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [filters, setFilters] = useState({
@@ -81,7 +83,8 @@ const HomePage = () => {
 
                     {/* User Actions */}
                     <div className="flex items-center gap-6 text-gray-700">
-                        <div className="hidden md:flex flex-col text-sm cursor-pointer hover:text-green-700 transition">
+                        <div className="hidden md:flex flex-col text-sm cursor-pointer hover:text-green-700 transition"
+                            onClick={() => setIsModalOpen(true)}>
                             <span className="text-xs text-gray-500">Bienvenido</span>
                             <div className="flex items-center gap-1 font-bold">
                                 <span>Iniciar sesión</span>
@@ -213,6 +216,27 @@ const HomePage = () => {
                     )}
                 </main>
             </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+
+                    {/* Contenedor del Modal */}
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative overflow-hidden animate-fade-in-down">
+
+                        {/* Botón Cerrar (X) */}
+                        <button
+                            onClick={() => setIsModalOpen(false)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 z-10 transition"
+                        >
+                            <X size={24} />
+                        </button>
+
+                        {/* Renderizamos tu componente CreateUser aquí dentro */}
+                        <div className="max-h-[95vh] overflow-y-auto">
+                            <CreateUser />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

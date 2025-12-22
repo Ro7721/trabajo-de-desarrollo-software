@@ -2,11 +2,28 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ReactspringApplication",
+            "request": "launch",
+            "mainClass": "epiis.miproyecto.reactspring.ReactspringApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-ReactspringApplication<reactspring>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "mainClass": "epiis.miproyecto.reactspring.ReactspringApplication",
             "projectName": "reactspring",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MiAppApplication<mi-app>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.epiis.mi_app.MiAppApplication",
+            "projectName": "mi-app",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
