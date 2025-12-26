@@ -231,7 +231,7 @@ const HomePage = () => {
                         </button>
 
                         {/* Renderizamos tu componente CreateUser aquí dentro */}
-                        <div className="max-h-[95vh] overflow-y-auto">
+                        <div className="max-h-[90vh] overflow-y-auto">
                             <CreateUser />
                         </div>
                     </div>

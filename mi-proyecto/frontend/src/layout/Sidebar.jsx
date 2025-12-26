@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import logo from '../img/roger.jpeg';
 import {
     faGauge,
     faUser,
@@ -15,6 +16,7 @@ import {
     faCog
 } from '@fortawesome/free-solid-svg-icons';
 import '../css/dashboard/sidebar.css';
+
 const Sidebar = () => {
     const [openMenu, setOpenMenu] = useState(null);
 
@@ -27,14 +29,16 @@ const Sidebar = () => {
 
             {/* LOGO */}
             <div className="flex items-center gap-3 p-4 border-b border-gray-700">
-                <img src="../img/roger.jpeg" alt="Logo" />
+                <div className="logo-img">
+                    <img src={logo} alt="Logo" />
+                </div>
                 <h1 className="font-bold">SAGA FALABELLA</h1>
             </div>
 
             {/* MENU */}
             <nav className="p-4">
 
-                <NavLink to="/" className="menu-item">
+                <NavLink to="/admin" className="menu-item">
                     <FontAwesomeIcon icon={faGauge} />
                     <span>Dashboard</span>
                 </NavLink>
@@ -49,13 +53,13 @@ const Sidebar = () => {
                     />
                 </button>
                 <div className={`submenu ${openMenu === 'usuario' ? 'open' : ''}`}>
-                    <NavLink to="/usuario/agregar">
+                    <NavLink to="/admin/usuario/agregar">
                         <FontAwesomeIcon icon={faPlus} /> Agregar
                     </NavLink>
-                    <NavLink to="/usuario/listar">
+                    <NavLink to="/admin/usuario/listar">
                         <FontAwesomeIcon icon={faList} /> Listar
                     </NavLink>
-                    <NavLink to="/usuario/editar">
+                    <NavLink to="/admin/usuario/editar">
                         <FontAwesomeIcon icon={faPen} /> Editar
                     </NavLink>
                 </div>
@@ -71,13 +75,13 @@ const Sidebar = () => {
                 </button>
 
                 <div className={`submenu ${openMenu === 'productos' ? 'open' : ''}`}>
-                    <NavLink to="/productos/agregar">
+                    <NavLink to="/admin/productos/agregar">
                         <FontAwesomeIcon icon={faPlus} /> Agregar
                     </NavLink>
-                    <NavLink to="/productos/listar">
+                    <NavLink to="/admin/productos/listar">
                         <FontAwesomeIcon icon={faList} /> Listar
                     </NavLink>
-                    <NavLink to="/productos/editar">
+                    <NavLink to="/admin/productos/editar">
                         <FontAwesomeIcon icon={faPen} /> Editar
                     </NavLink>
                 </div>
@@ -93,9 +97,9 @@ const Sidebar = () => {
                 </button>
 
                 <div className={`submenu ${openMenu === 'ventas' ? 'open' : ''}`}>
-                    <NavLink to="/ventas/agregar"><FontAwesomeIcon icon={faPlus} /> Agregar</NavLink>
-                    <NavLink to="/ventas/listar"><FontAwesomeIcon icon={faList} /> Listar</NavLink>
-                    <NavLink to="/ventas/editar"><FontAwesomeIcon icon={faPen} /> Editar</NavLink>
+                    <NavLink to="/admin/ventas/agregar"><FontAwesomeIcon icon={faPlus} /> Agregar</NavLink>
+                    <NavLink to="/admin/ventas/listar"><FontAwesomeIcon icon={faList} /> Listar</NavLink>
+                    <NavLink to="/admin/ventas/editar"><FontAwesomeIcon icon={faPen} /> Editar</NavLink>
                 </div>
 
                 {/* REPORTES */}
@@ -109,8 +113,8 @@ const Sidebar = () => {
                 </button>
 
                 <div className={`submenu ${openMenu === 'reportes' ? 'open' : ''}`}>
-                    <NavLink to="/reportes/agregar"><FontAwesomeIcon icon={faPlus} /> Agregar</NavLink>
-                    <NavLink to="/reportes/listar"><FontAwesomeIcon icon={faList} /> Listar</NavLink>
+                    <NavLink to="/admin/reportes/agregar"><FontAwesomeIcon icon={faPlus} /> Agregar</NavLink>
+                    <NavLink to="/admin/reportes/listar"><FontAwesomeIcon icon={faList} /> Listar</NavLink>
                 </div>
                 {/* CONFIGURACIONES */}
                 <button className={`menu-item ${openMenu === 'configuraciones' ? 'active' : ''}`} onClick={() => toggleMenu('configuraciones')}>
