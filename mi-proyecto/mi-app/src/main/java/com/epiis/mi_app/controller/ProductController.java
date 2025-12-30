@@ -72,6 +72,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.createProduct(productDto));
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Product>> getAllProduct() {
+
+        return null;
+    }
+
     /*
      * @PutMapping("/update/{id}")
      * public ResponseEntity<Product> updateProduct(@PathVariable String

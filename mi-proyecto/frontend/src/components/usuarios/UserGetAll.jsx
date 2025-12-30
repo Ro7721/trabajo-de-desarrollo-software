@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { getAllUsers, deleteUser, searchUsers } from '../../services/UserService';
 import '../../css/usuario/getalluser.css';
-
+import User from "../../model/User";
+import { faTrash, faEye, faPen, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 const UserGetAll = () => {
     const navigate = useNavigate()
     const [users, setUsers] = useState([])
@@ -10,33 +13,54 @@ const UserGetAll = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [usersPerPage] = useState(8)
 
-    // Mock data - replace with actual API call
     useEffect(() => {
-        // Simulating API call
-        setTimeout(() => {
-            const mockUsers = [
-                { id: 1, name: 'Juan Pérez', email: 'juan.perez@email.com', role: 'Admin', status: 'Activo', phone: '+51 999 888 777' },
-                { id: 2, name: 'María García', email: 'maria.garcia@email.com', role: 'Usuario', status: 'Activo', phone: '+51 988 777 666' },
-                { id: 3, name: 'Carlos López', email: 'carlos.lopez@email.com', role: 'Usuario', status: 'Inactivo', phone: '+51 977 666 555' },
-                { id: 4, name: 'Ana Martínez', email: 'ana.martinez@email.com', role: 'Moderador', status: 'Activo', phone: '+51 966 555 444' },
-                { id: 5, name: 'Pedro Sánchez', email: 'pedro.sanchez@email.com', role: 'Usuario', status: 'Activo', phone: '+51 955 444 333' },
-                { id: 6, name: 'Laura Torres', email: 'laura.torres@email.com', role: 'Admin', status: 'Activo', phone: '+51 944 333 222' },
-                { id: 7, name: 'Diego Ramírez', email: 'diego.ramirez@email.com', role: 'Usuario', status: 'Inactivo', phone: '+51 933 222 111' },
-                { id: 8, name: 'Sofía Flores', email: 'sofia.flores@email.com', role: 'Moderador', status: 'Activo', phone: '+51 922 111 000' },
-                { id: 9, name: 'Miguel Ángel', email: 'miguel.angel@email.com', role: 'Usuario', status: 'Activo', phone: '+51 911 000 999' },
-                { id: 10, name: 'Valentina Cruz', email: 'valentina.cruz@email.com', role: 'Usuario', status: 'Activo', phone: '+51 900 999 888' },
-            ]
-            setUsers(mockUsers)
+        getAllUsers().then(data => {
+            setUsers(data)
             setLoading(false)
-        }, 500)
+        }).catch(error => {
+            console.error('Error al cargar usuarios:', error)
+            setLoading(false)
+        })
     }, [])
 
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value)
+        setCurrentPage(1)
+    }
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault()
+        if (searchTerm.trim()) {
+            setLoading(true)
+            searchUsers(searchTerm).then(data => {
+                setUsers(data)
+                setLoading(false)
+            }).catch(error => {
+                console.error('Error al buscar usuarios:', error)
+                setLoading(false)
+            })
+        }
+    }
+
+    const handleDeleteUser = (userId) => {
+        if (window.confirm('¿Estás seguro de eliminar este usuario?')) {
+            deleteUser(userId).then(() => {
+                setUsers(users.filter(user => user.id !== userId))
+            }).catch(error => {
+                console.error('Error al eliminar usuario:', error)
+                alert('Error al eliminar el usuario. Por favor intenta de nuevo.')
+            })
+        }
+    }
+
     // Filter users based on search term
-    const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.role.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    const filteredUsers = users.filter(user => {
+        const fullName = `${user.firstName || ''} ${user.surName || ''}`.toLowerCase();
+        const email = (user.email || '').toLowerCase();
+        const dni = (user.dni || '').toLowerCase();
+        const term = searchTerm.toLowerCase();
+        return fullName.includes(term) || email.includes(term) || dni.includes(term);
+    })
 
     // Pagination logic
     const indexOfLastUser = currentPage * usersPerPage
@@ -51,13 +75,6 @@ const UserGetAll = () => {
     const handleEdit = (userId) => {
         // Navigate to edit page or open edit modal
         console.log('Edit user:', userId)
-    }
-
-    const handleDelete = (userId) => {
-        // Show confirmation and delete user
-        if (window.confirm('¿Estás seguro de eliminar este usuario?')) {
-            setUsers(users.filter(user => user.id !== userId))
-        }
     }
 
     const handleView = (userId) => {
@@ -75,15 +92,17 @@ const UserGetAll = () => {
                     </h1>
                     <p className="page-subtitle">Administra y visualiza todos los usuarios del sistema</p>
                 </div>
-                <button className="btn-add-user" onClick={() => navigate('/admin/usuario/agregar')}>
-                    <span className="plus-icon">+</span>
+                <button className="btn-add-user text-bold" onClick={() => navigate('/admin/usuario/agregar')}>
+                    <span className="plus-icon"><FontAwesomeIcon icon={faPlus} /></span>
                     Nuevo Usuario
                 </button>
             </div>
 
             <div className="user-controls">
                 <div className="search-container">
-                    <span className="search-icon">🔍</span>
+                    <span className="search-icon bg-gray-200">
+                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </span>
                     <input
                         type="text"
                         className="search-input"
@@ -98,11 +117,11 @@ const UserGetAll = () => {
                 <div className="stats-container">
                     <div className="stat-card">
                         <span className="stat-value">{filteredUsers.length}</span>
-                        <span className="stat-label">Usuarios</span>
+                        <span className="stat-label">Total Usuarios</span>
                     </div>
                     <div className="stat-card">
-                        <span className="stat-value">{filteredUsers.filter(u => u.status === 'Activo').length}</span>
-                        <span className="stat-label">Activos</span>
+                        <span className="stat-value">{users.length}</span>
+                        <span className="stat-label">Registrados</span>
                     </div>
                 </div>
             </div>
@@ -119,10 +138,11 @@ const UserGetAll = () => {
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Nombre</th>
+                                    <th>Nombre Completo</th>
+                                    <th>DNI</th>
                                     <th>Email</th>
                                     <th>Teléfono</th>
-                                    <th>Rol</th>
+                                    <th>Fecha de Nacimiento</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -133,43 +153,39 @@ const UserGetAll = () => {
                                         <td className="user-id">#{user.id}</td>
                                         <td className="user-name">
                                             <div className="name-with-avatar">
-                                                <div className="avatar">{user.name.charAt(0)}</div>
-                                                <span>{user.name}</span>
+                                                <div className="avatar">
+                                                    {user.firstName ? user.firstName.charAt(0).toUpperCase() : '?'}
+                                                </div>
+                                                <span>{`${user.firstName || ''} ${user.surName || ''}`}</span>
                                             </div>
                                         </td>
-                                        <td className="user-email">{user.email}</td>
-                                        <td className="user-phone">{user.phone}</td>
-                                        <td>
-                                            <span className={`role-badge role-${user.role.toLowerCase()}`}>
-                                                {user.role}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className={`status-badge status-${user.status.toLowerCase()}`}>
-                                                {user.status}
-                                            </span>
-                                        </td>
+                                        <td className="user-dni">{user.dni || 'N/A'}</td>
+                                        <td className="user-email">{user.email || 'N/A'}</td>
+                                        <td className="user-phone">{user.phone || 'N/A'}</td>
+                                        <td className="user-birthdate">{user.birthDate || 'N/A'}</td>
+                                        <td className={`status ${user.active ? 'active' : 'inactive'}`}>
+                                            {user.active ? 'Activo' : 'Inactivo'}</td>
                                         <td className="user-actions">
                                             <button
-                                                className="action-btn view-btn"
+                                                className="icon-btn"
                                                 onClick={() => handleView(user.id)}
                                                 title="Ver detalles"
                                             >
-                                                👁️
+                                                <FontAwesomeIcon icon={faEye} style={{ color: "#ebd424ff" }} />
                                             </button>
                                             <button
-                                                className="action-btn edit-btn"
+                                                className="icon-btn"
                                                 onClick={() => handleEdit(user.id)}
                                                 title="Editar"
                                             >
-                                                ✏️
+                                                <FontAwesomeIcon icon={faPen} style={{ color: "#239a50" }} />
                                             </button>
                                             <button
-                                                className="action-btn delete-btn"
-                                                onClick={() => handleDelete(user.id)}
+                                                className="icon-btn"
+                                                onClick={() => handleDeleteUser(user.id)}
                                                 title="Eliminar"
                                             >
-                                                🗑️
+                                                <FontAwesomeIcon icon={faTrash} style={{ color: "#ef4444" }} />
                                             </button>
                                         </td>
                                     </tr>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faUserPlus,
@@ -8,9 +9,11 @@ import {
     faLock
 } from '@fortawesome/free-solid-svg-icons';
 import '../../css/usuario/createuser.css';
-import Usuary from "../../model/Usuary";
+import User from "../../model/User";
+import { createUsers } from "../../services/UserService";
 const CreateUser = () => {
-    const [usuario, setUsuario] = useState(new Usuary(null, '', '', '', '', ''));
+    const navigate = useNavigate();
+    const [usuario, setUsuario] = useState(new User(null, '', '', '', '', '', '', null, true, null, null));
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({
         firstName: '',
@@ -24,23 +27,36 @@ const CreateUser = () => {
     const handleChange = (event) => {
         const { name, value } = event.target;
         setUsuario((prevUsuario) => ({ ...prevUsuario, [name]: value }));
-        validateFields(value);
-    }
-    const validateFields = (value) => {
-        let err = '';
-        if (value.firstName == null) {
-            err = 'El nombre es requerido';
-            return;
-        }
-        return err;
     }
     const handleConfirmPasswordChange = (event) => {
         setConfirmPassword(event.target.value);
-        validaetConfirmPassword(event.target.value);
+        validateConfirmPassword(event.target.value);
     }
-    const validaetConfirmPassword = (value) => {
-        let error = value !== usuario.password ? 'las contreseñas no coinciden' : '';
+    const validateConfirmPassword = (value) => {
+        let error = value !== usuario.password ? 'las contraseñas no coinciden' : '';
         setErrors((prevErrors) => ({ ...prevErrors, confirmPassword: error }));
+    }
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (usuario.password !== confirmPassword) {
+            setErrors((prevErrors) => ({ ...prevErrors, confirmPassword: 'Las contraseñas no coinciden' }));
+            return;
+        }
+        try {
+            await createUsers(usuario);
+            setUsuario(new User(null, '', '', '', '', '', '', null, true, null, null));
+            setConfirmPassword('');
+            setErrors({
+                firstName: '',
+                surName: '',
+                DNI: '',
+                email: '',
+                password: '',
+                confirmPassword: ''
+            });
+        } catch (error) {
+            console.error('Error al crear el usuario:', error);
+        }
     }
     return (
         <div className="form-container">
@@ -52,7 +68,7 @@ const CreateUser = () => {
                 <h2 className="section-title">Crear Cuenta</h2>
             </div>
 
-            <form className="user-form">
+            <form className="user-form" onSubmit={handleSubmit}>
                 <h3 className="section-title">Información Personal</h3>
 
                 <div className="form-row">
@@ -63,6 +79,7 @@ const CreateUser = () => {
                             <input
                                 type="text"
                                 id="nombre"
+                                name="firstName"
                                 value={usuario.firstName}
                                 onChange={handleChange}
                                 placeholder="Ingresa tu nombre"
@@ -78,6 +95,7 @@ const CreateUser = () => {
                             <input
                                 type="text"
                                 id="apellido"
+                                name="surName"
                                 value={usuario.surName}
                                 onChange={handleChange}
                                 placeholder="Ingrese su apellido"
@@ -95,7 +113,8 @@ const CreateUser = () => {
                             <input
                                 type="text"
                                 id="dni"
-                                value={usuario.DNI}
+                                name="dni"
+                                value={usuario.dni}
                                 onChange={handleChange}
                                 placeholder="Ej. 12345678"
                                 pattern="[0-9]*"
@@ -110,7 +129,9 @@ const CreateUser = () => {
                             <input
                                 type="email"
                                 id="email"
+                                name="email"
                                 value={usuario.email}
+                                onChange={handleChange}
                                 placeholder="Ingrese su email"
                                 required
                             />
@@ -125,7 +146,9 @@ const CreateUser = () => {
                             <input
                                 type="password"
                                 id="password"
+                                name="password"
                                 value={usuario.password}
+                                onChange={handleChange}
                                 placeholder="Ingrese su contraseña"
                                 required
                             />
@@ -150,8 +173,10 @@ const CreateUser = () => {
                 </div>
 
                 <div className="form-actions">
+                    <button type="button" className="btn-cancel" onClick={() => navigate('/admin/usuario/listar')}>Cancelar</button>
                     <button type="submit" className="btn-submit">Registrar Usuario</button>
                 </div>
+
             </form>
         </div>
     );

@@ -6,6 +6,7 @@ import Footer from '../layout/Footer';
 import DashboardCard from '../components/DashboardCard';
 import UserGetAll from '../components/usuarios/UserGetAll';
 import CreateUser from '../components/usuarios/CreateUser';
+import CreateProduct from './CreateProduct'
 import '../css/dashboard/dashboardcard.css';
 const Dashboard = () => {
     return (
@@ -29,11 +30,13 @@ const Dashboard = () => {
                         <Route path="usuario/editar" element={<h1>Editar Usuario</h1>} />
 
                         {/* Productos */}
-                        <Route path="productos/agregar" element={<h1>Agregar Producto</h1>} />
+                        <Route path="productos/agregar" element={<CreateProduct />} />
                         <Route path="productos/listar" element={<h1>Listar Productos</h1>} />
+                        <Route path="productos/editar" element={<h1>Editar Productos</h1>} />
 
                         {/* Ventas */}
                         <Route path="ventas/listar" element={<h1>Ventas</h1>} />
+                        <Route path="venta/editar" element={<h1>editar ventas</h1>} />
 
                         {/* Reportes */}
                         <Route path="reportes/listar" element={<h1>Reportes</h1>} />
