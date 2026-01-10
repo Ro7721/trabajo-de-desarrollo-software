@@ -1,0 +1,39 @@
+<header class="header">
+  <div class="container">
+    <a routerLink="/" class="logo">
+      MiMarca<span class="dot">.</span>
+    </a>
+
+    <button class="mobile-toggle" (click)="toggleMenu()" aria-label="Abrir menú">
+      <span class="bar" [class.active]="isMenuOpen"></span>
+      <span class="bar" [class.active]="isMenuOpen"></span>
+      <span class="bar" [class.active]="isMenuOpen"></span>
+    </button>
+
+    <nav class="nav" [class.nav-open]="isMenuOpen">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a routerLink="" (click)="closeMenu()" routerLinkActive="active">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="person-getall" (click)="closeMenu()" routerLinkActive="active">lista de Persona</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="person-insert" (click)="closeMenu()" routerLinkActive="active">Registrar</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="suma" (click)="closeMenu()" routerLinkActive="active">Nosotros</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/contacto" (click)="closeMenu()" routerLinkActive="active">Contacto</a>
+        </li>
+      </ul>
+
+      <div class="header-actions">
+        <a routerLink="/login" class="btn-primary" (click)="closeMenu()">Ingresar</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" *ngIf="isMenuOpen" (click)="closeMenu()"></div>

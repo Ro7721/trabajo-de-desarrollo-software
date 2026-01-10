@@ -1,0 +1,14 @@
+<div style="padding: 20px">
+      <h2>Suma con Spring Boot</h2>
+      
+      <input type="number" [(ngModel)]="number1" placeholder="Número 1">
+      <span> + </span>
+      <input type="number" [(ngModel)]="number2" placeholder="Número 2">
+      
+      <button (click)="realizarSuma()">Sumar</button>
+      <button (click)="realizarMultiplicacion()">Multiplicar</button>
+
+      <h3 *ngIf="result !== null">Resultado: {{ result }}</h3>
+      <h3></h3>
+</div>
+  

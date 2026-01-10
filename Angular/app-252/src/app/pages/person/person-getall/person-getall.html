@@ -1,0 +1,26 @@
+
+<div class="container-person">
+  <p>Lista de Personas</p>
+  <table class="table-person">
+    <thead>
+      <tr>
+        <th>Nombre Completo</th>
+        <th>DNI</th>
+        <th>Fecha Nacimiento</th>
+        <th>Email</th>
+        <th>Celular</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let person of persons">
+        <td>{{ person.esFullName() }}</td>
+        <td>{{ person.dni }}</td>
+        <td>{{ person.birthDate | date:'dd/MM/yyyy' }}</td>
+        <td>{{ person.email }}</td>
+        <td>{{ person.phone }}</td>
+        <td class="activo">{{ person.status ? 'activo': 'inactivo' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
