@@ -33,6 +33,7 @@ public class UserServices {
         user.setBirthDate(dto.getBirthDate());
         user.setEmail(dto.getEmail());
         user.setPassword(PasswordHash.hashPassword(dto.getPassword()));
+        user.setActive(true); // Establecer el usuario como activo por defecto
         return user;
     }
 
@@ -41,7 +42,7 @@ public class UserServices {
         existingUser.setFirstName(dto.getFirstName());
         existingUser.setSurname(dto.getSurName());
         existingUser.setDni(dto.getDni());
-        existingUser.setPhone(dto.getDni());
+        existingUser.setPhone(dto.getPhone());
         existingUser.setBirthDate(dto.getBirthDate());
         existingUser.setEmail(dto.getEmail());
         if (dto.getPassword() != null && !dto.getPassword().trim().isEmpty()) {
@@ -59,6 +60,7 @@ public class UserServices {
         dto.setPhone(user.getPhone());
         dto.setBirthDate(user.getBirthDate());
         dto.setEmail(user.getEmail());
+        dto.setActive(user.isActive()); // Incluir el estado activo
         return dto;
     }
 
@@ -93,7 +95,7 @@ public class UserServices {
         }
 
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-            if (!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+            if (!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[^a-zA-Z\\\\d]).{8,}$")) {
                 throw new ValidationException("La contraseña no cumple con los requisitos de seguridad");
             }
 

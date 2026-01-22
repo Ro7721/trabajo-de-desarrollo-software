@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getAllUsers, deleteUser, searchUsers } from '../../services/UserService';
 import '../../css/usuario/getalluser.css';
-import User from "../../model/User";
-import { faTrash, faEye, faPen, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEye, faPen, faPlus, faMagnifyingGlass, faUsers } from '@fortawesome/free-solid-svg-icons';
 const UserGetAll = () => {
     const navigate = useNavigate()
     const [users, setUsers] = useState([])
@@ -87,12 +86,12 @@ const UserGetAll = () => {
             <div className="user-header">
                 <div className="header-content">
                     <h1 className="page-title">
-                        <span className="icon">👥</span>
+                        <span className="icon"><FontAwesomeIcon icon={faUsers} /></span>
                         Gestión de Usuarios
                     </h1>
                     <p className="page-subtitle">Administra y visualiza todos los usuarios del sistema</p>
                 </div>
-                <button className="btn-add-user text-bold" onClick={() => navigate('/admin/usuario/agregar')}>
+                <button className="btn-add-user text-bold shadow-lg" onClick={() => navigate('/admin/usuario/agregar')}>
                     <span className="plus-icon"><FontAwesomeIcon icon={faPlus} /></span>
                     Nuevo Usuario
                 </button>

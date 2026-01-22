@@ -57,21 +57,42 @@ public class ProductServices {
         return productRepository.findById(id);
     }
 
-    public void updateProduct(ProductDto productDto) {
-        Product product = productRepository.findById(productDto.getIdProduct()).get();
-        product.setName(productDto.getName());
-        product.setDescription(productDto.getDescription());
-        product.setPrice(productDto.getPrice());
-        product.setStock(productDto.getStock());
-        product.setSku(productDto.getSku());
-        product.setImageUrl(productDto.getImageUrl());
-        product.setCategory(categoryRepository.findById(productDto.getCategoryId()).get());
-        product.setFeatured(productDto.isFeatured());
-        product.setRating(productDto.getRating());
-        product.setReviewCount(productDto.getReviewCount());
-        product.setUpdatedAt(LocalDateTime.now());
-        product.setDiscountPrice(productDto.getDiscountPrice());
-        productRepository.save(product);
+    public Product mapDtoProductUpdate(ProductDto productDto, Product exisProduct) {
+        exisProduct.setName(productDto.getName());
+        exisProduct.setDescription(productDto.getDescription());
+        exisProduct.setPrice(productDto.getPrice());
+        exisProduct.setStock(productDto.getStock());
+        exisProduct.setSku(productDto.getSku());
+        exisProduct.setImageUrl(productDto.getImageUrl());
+        exisProduct.setCategory(categoryRepository.findById(productDto.getCategoryId()).get());
+        exisProduct.setFeatured(productDto.isFeatured());
+        exisProduct.setRating(productDto.getRating());
+        exisProduct.setReviewCount(productDto.getReviewCount());
+        exisProduct.setUpdatedAt(LocalDateTime.now());
+        exisProduct.setDiscountPrice(productDto.getDiscountPrice());
+        return exisProduct;
+    }
+
+    private boolean validateFields(ProductDto productDto) {
+        if (productDto.getStock() < 1) {
+            throw new RuntimeException("Stock must be greater than 0");
+        }
+        if (productDto.getReviewCount() < 0) {
+            throw new RuntimeException("Review count must be greater than 0");
+        }
+        return true;
+    }
+
+    public Product upddateProduct(ProductDto dto, String idProduct) {
+        Product exisProduct = productRepository.findById(idProduct)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        try {
+            Product update = mapDtoProductUpdate(dto, exisProduct);
+            return productRepository.save(update);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating product");
+        }
+
     }
 
     public void deleteProduct(String id) {

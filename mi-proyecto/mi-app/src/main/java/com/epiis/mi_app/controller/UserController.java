@@ -64,6 +64,8 @@ public class UserController {
             return buildValidationErrorResponse(result);
         }
         try {
+            System.out.println("usuario ingresados " + userDto.getFirstName() + " " +
+                    userDto.getSurName() + " " + userDto.getDni());
             User created = userServices.createUser(userDto);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(userServices.mapUserToDto(created));
