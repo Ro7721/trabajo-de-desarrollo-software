@@ -14,10 +14,10 @@ public class UserDto {
     private String firstName;
     @NotBlank(message = "El apellido es obligatorio")
     private String surName;
-    @Pattern(regexp = "\\d{8}", message = "El dni debe tener 8 dígitos numéricos")
+    @Pattern(regexp = "^\\d{8}$", message = "El dni debe tener 8 dígitos numéricos")
     @NotBlank(message = "El dni es obligatorio")
     private String dni;
-    @Pattern(regexp = "\\d{9}", message = "El telefono debe tener 9 dígitos numéricos")
+    @Pattern(regexp = "^\\d{9}$", message = "El telefono debe tener 9 dígitos numéricos")
     @NotBlank(message = "El telefono es obligatorio")
     private String phone;
     @NotNull

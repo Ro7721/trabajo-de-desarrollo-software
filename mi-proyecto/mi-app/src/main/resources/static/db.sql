@@ -15,7 +15,8 @@ CREATE TABLE Usuarios (
 CREATE TABLE Categorias (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT
+    descripcion TEXT,
+    imageUrl VARCHAR(100)
 );
 
 -- Tabla de productos
@@ -24,9 +25,17 @@ CREATE TABLE Productos (
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT,
     precio DECIMAL(10,2) NOT NULL,
+    precio_descuento DECIMAL,
     stock INT DEFAULT 0,
     id_categoria INT,
     FOREIGN KEY (id_categoria) REFERENCES Categorias(id_categoria)
+    sku varchar(20),
+    imageUrl varchar(50),
+    destacado boolean,
+    cantidadDisponible INT,
+    fecha_creacion DATE,
+    fecha_actualizacion DATE,
+
 );
 
 -- Tabla de inventario
@@ -43,7 +52,9 @@ CREATE TABLE Inventario (
 CREATE TABLE Carrito (
     id_carrito INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
-    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario)
+    id_producto INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
+    FOREIGN KEY (id_producto) REFERENCES Productos(id_producto),
 );
 
 -- Tabla de productos en carrito

@@ -241,7 +241,8 @@ const CreateProduct = () => {
                                 accept="image/*"
                                 onChange={handleImageChange}
                                 disabled={uploading}
-                                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700 cursor-pointer"
+                                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full
+                                 file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700 cursor-pointer"
                             />
                             {uploading && <p className="text-blue-600 font-semibold mt-2 animate-pulse">Subiendo imagen al servidor...</p>}
                         </>
@@ -271,7 +272,8 @@ const CreateProduct = () => {
                 <button
                     type="submit"
                     disabled={uploading || loadingSubmit}
-                    className="w-full bg-green-600 text-white font-bold py-4 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg transition transform hover:-translate-y-0.5"
+                    className="w-full bg-green-600 text-white font-bold py-4 rounded-lg hover:bg-green-700
+                     disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg transition transform hover:-translate-y-0.5"
                 >
                     {loadingSubmit ? 'Guardando Producto...' : 'GUARDAR PRODUCTO'}
                 </button>

@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { getProducts, getCategories } from '../services/ProductService';
 import ProductCard from '../components/ProductCard';
 import { Search, Filter, ShoppingCart, Menu, ChevronDown, X } from 'lucide-react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import CreateUser from '../components/usuarios/CreateUser';
 import { Link, Links } from 'react-router-dom';
+import ProductDetails from '../components/product/ProductDetails';
 const HomePage = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openAccount, setOpenAccount] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDetailOpen, setDetailOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [filters, setFilters] = useState({
         category: '',
         search: '',
@@ -50,6 +52,16 @@ const HomePage = () => {
         setPage(0);
         fetchProducts();
     };
+    const handleOpenDetails = (product) => {
+        setSelectedProduct(product);
+        setDetailOpen(true);
+    }
+
+    const handleAddToCart = () => {
+        // Aquí puedes actualizar el contador del carrito si es necesario
+        // Por ejemplo, llamar a una función para obtener el carrito actualizado
+        fetchProducts(); // Opcional: recargar productos para actualizar stock
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans">
@@ -186,8 +198,13 @@ const HomePage = () => {
                         <>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {products.map(product => (
-                                    <ProductCard key={product.idProduct} product={product} />
+                                    <ProductCard key={product.idProduct} product={product} onOpenDetails={handleOpenDetails} onAddToCart={handleAddToCart} />
                                 ))}
+                                <ProductDetails
+                                    product={selectedProduct}
+                                    isOpen={isDetailOpen}
+                                    onClose={() => setDetailOpen(false)}
+                                />
                             </div>
 
                             {/* Pagination */}
@@ -233,6 +250,20 @@ const HomePage = () => {
                         {/* Renderizamos tu componente CreateUser aquí dentro */}
                         <div className="max-h-[90vh] overflow-y-auto">
                             <CreateUser />
+                        </div>
+                    </div>
+                </div>
+            )}
+            {isDetailOpen && (
+                <div className="fixed insert-0 bg-black bg-opacity-50  rounded-xl backdrop-blur-sm z-50 flex justify-center items-center p-4">
+                    {/* contenedor modal*/}
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md relative overflow-hidden animate-fade-in-down">
+                        <button onClick={() => setIsModalOpen(false)} className="">
+                            <X size={15} />
+                        </button>
+                        {/* Rendirazamos mi componente ProductDetail aqui dentro */}
+                        <div className="max-h-[90vh] overflow-y-auto">
+                            <ProductDetails />
                         </div>
                     </div>
                 </div>

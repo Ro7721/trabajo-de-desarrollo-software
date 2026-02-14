@@ -71,7 +71,7 @@ public class UserServices {
             throw new ValidationException("El nombre es obligatorio");
         }
 
-        if (dto.getDni() == null || !dto.getDni().matches("\\d{8}")) {
+        if (dto.getDni() == null || !dto.getDni().matches("^\\d{8}$")) {
             throw new ValidationException("El DNI debe tener 8 dígitos numéricos");
         }
 
@@ -95,7 +95,7 @@ public class UserServices {
         }
 
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-            if (!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[^a-zA-Z\\\\d]).{8,}$")) {
+            if (!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\\\d]).{8,}$")) {
                 throw new ValidationException("La contraseña no cumple con los requisitos de seguridad");
             }
 
@@ -111,9 +111,10 @@ public class UserServices {
         validateUserDto(dto, false);
         try {
             User user = mapDtoToUsuary(dto);
+            System.out.println(user);
             return usuaryRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicateResourceException("Erro de integridad de datos: posible duplicado");
+            throw new DuplicateResourceException("Error de integridad de datos: posible duplicado");
         }
     }
 

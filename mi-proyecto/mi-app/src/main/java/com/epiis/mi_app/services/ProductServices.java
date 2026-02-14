@@ -1,6 +1,8 @@
 package com.epiis.mi_app.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -73,16 +75,7 @@ public class ProductServices {
         return exisProduct;
     }
 
-    private boolean validateFields(ProductDto productDto) {
-        if (productDto.getStock() < 1) {
-            throw new RuntimeException("Stock must be greater than 0");
-        }
-        if (productDto.getReviewCount() < 0) {
-            throw new RuntimeException("Review count must be greater than 0");
-        }
-        return true;
-    }
-
+    // actualizar Productos
     public Product upddateProduct(ProductDto dto, String idProduct) {
         Product exisProduct = productRepository.findById(idProduct)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -133,9 +126,11 @@ public class ProductServices {
                     cb.like(cb.lower(root.get("name")), "%" + search.toLowerCase() + "%"),
                     cb.like(cb.lower(root.get("description")), "%" + search.toLowerCase() + "%")));
         }
+
         if (category != null && !category.isEmpty()) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("category").get("name"), category));
         }
+
         if ("price_asc".equals(sortBy)) {
             pageable = PageRequest.of(page, size, Sort.by("price").ascending());
         } else if ("price_desc".equals(sortBy)) {
@@ -162,5 +157,43 @@ public class ProductServices {
         category.setImageUrl(dto.getImageUrl());
         category.setProducts(getAllProducts());
         return categoryRepository.save(category);
+    }
+
+    // obtener detalles completo de producto
+    public ProductDto getProductoDetailsById(String id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("product not fount"));
+        return convertToDetailsDto(product);
+    }
+
+    private ProductDto convertToDetailsDto(Product product) {
+        ProductDto dto = new ProductDto();
+        dto.setIdProduct(product.getIdProduct());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+        dto.setPrice(product.getPrice());
+        dto.setDiscountPrice(product.getDiscountPrice());
+
+        /*
+         * //calcular porcentaje de descuento
+         * if(product.getPrice() != null && product.getDiscountPrice() != null){
+         * BigDecimal
+         * }
+         */
+        dto.setStock(product.getStock());
+        dto.setSku(product.getSku());
+        dto.setCategory(product.getCategory());
+        // Imagenes
+        List<String> imgs = new ArrayList<>();
+        if (product.getImageUrl() != null) {
+            imgs = Arrays.asList(product.getImageUrl().split(","));
+        }
+        dto.setImageUrl(imgs.get(0));
+        dto.setRating(product.getRating());
+        dto.setReviewCount(product.getReviewCount());
+        dto.setFeatured(product.isFeatured());
+        dto.setCreatedAt(product.getCreatedAt());
+        dto.setUpdatedAt(product.getUpdatedAt());
+        return dto;
     }
 }

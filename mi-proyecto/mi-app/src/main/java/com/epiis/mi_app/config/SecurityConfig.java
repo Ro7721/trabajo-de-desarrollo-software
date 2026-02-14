@@ -27,7 +27,8 @@ public class SecurityConfig {
                         // Allow access to static resources
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         // Allow access to public API endpoints
-                        .requestMatchers("/api/users/**", "/api/users/createUser", "/api/products/**").permitAll()
+                        .requestMatchers("/api/users/**", "/api/users/createUser", "/api/products/**", "/api/cart/**")
+                        .permitAll()
                         // All other requests require authentication
                         .anyRequest().authenticated());
 

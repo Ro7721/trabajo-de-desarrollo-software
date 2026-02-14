@@ -64,8 +64,11 @@ public class UserController {
             return buildValidationErrorResponse(result);
         }
         try {
-            System.out.println("usuario ingresados " + userDto.getFirstName() + " " +
-                    userDto.getSurName() + " " + userDto.getDni());
+            System.out.println("usuario ingresados " + userDto.getIdPerson() + " " + userDto.getFirstName() + " " +
+                    userDto.getSurName() + " " + userDto.getDni() + " " + userDto.getPhone() + " " +
+                    userDto.getBirthDate() + " " + userDto.getEmail() + " " + userDto.getPassword() + " "
+                    + userDto.getConfirmPassword());
+
             User created = userServices.createUser(userDto);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(userServices.mapUserToDto(created));
@@ -79,6 +82,7 @@ public class UserController {
     @PutMapping("/updateUser/{idPerson}")
     public ResponseEntity<?> updateUsuary(@PathVariable String idPerson,
             @Valid @RequestBody UserDto usuaryDto, BindingResult result) {
+
         if (result.hasErrors()) {
             buildValidationErrorResponse(result);
         }

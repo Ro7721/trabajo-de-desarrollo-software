@@ -26,4 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, String>, JpaSp
     Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     List<Product> findByIsFeaturedTrue();
+
+    // lista de los 5 productos ordenados ascentedentemente de su precio
+    List<Product> findTop5ByOrderByPriceAsc();
 }

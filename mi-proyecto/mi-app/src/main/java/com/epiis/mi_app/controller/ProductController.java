@@ -53,6 +53,7 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // productos destacados
     @GetMapping("/featured")
     public ResponseEntity<List<Product>> getFeaturedProduct() {
         return ResponseEntity.ok(productService.getFeaturedProduct());
@@ -108,5 +109,11 @@ public class ProductController {
         } catch (IOException e) {
             return ResponseEntity.badRequest().body("Error al subir la imagen");
         }
+    }
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<ProductDto> getProductId(@PathVariable String id) {
+        ProductDto dto = productService.getProductoDetailsById(id);
+        return ResponseEntity.ok(dto);
     }
 }
