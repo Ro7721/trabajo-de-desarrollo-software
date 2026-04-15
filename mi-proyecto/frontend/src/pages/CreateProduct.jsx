@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { createProduct, getCategories, uploadImage } from '../services/ProductService';
 import { useNavigate } from 'react-router-dom';
+import { NewspaperIcon } from 'lucide-react';
 
 const CreateProduct = () => {
     const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
-
+    const [notification, setNotification] = useState(null);
     // Estado inicial mapeado a tu entidad Java
     const [formData, setFormData] = useState({
         name: '',
@@ -38,6 +39,12 @@ const CreateProduct = () => {
         try {
             const url = await uploadImage(file);
             setFormData(prev => ({ ...prev, imageUrl: url }));
+            if (url && url.success) {
+                setNotification({ type: 'success', message: 'Imagen subido correctamente' })
+                setTimeout(() => {
+                    setNotification(null);
+                }, 1000);
+            }
         } catch (error) {
             alert("Error al subir la imagen. Verifica que el Backend esté corriendo y acepte archivos grandes.");
             console.error(error);
@@ -99,7 +106,13 @@ const CreateProduct = () => {
 
             console.log("Enviando payload:", payload); // Para depuración
 
-            await createProduct(payload);
+            const result = await createProduct(payload);
+            if (result && result.success) {
+                setNotification({ type: 'success', message: 'Producto registrado con exito!' })
+                setTimeout(() => {
+                    setNotification(null);
+                }, 1200);
+            }
             alert('¡Producto registrado con éxito!');
             navigate('/');
 
@@ -113,7 +126,13 @@ const CreateProduct = () => {
 
     return (
         <div className="max-w-4xl mx-auto mt-10 p-8 bg-white shadow-xl rounded-2xl border border-gray-100">
-            <h2 className="text-3xl font-bold mb-8 text-gray-800 border-b pb-4">Registrar Nuevo Producto</h2>
+            {notification && (
+                <div className={`fixed top-4 left-1/2 transform  -translate-x-1/2 px-6 py-3 rounded-lg z=60text-white font-midium animate-bounce ${notification.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}>
+                    {notification.message}
+                </div>
+            )}
+
+            <h2 className="text-3xl font-bold mb-8 text-gray-800 border-b pb-4"><NewspaperIcon size={30} /> Registrar Nuevo Producto</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
 

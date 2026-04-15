@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ShoppingCart, DessertIcon, X } from 'lucide-react';
+import { ShoppingCart, Info, X } from 'lucide-react';
 import ProductDetails from './product/ProductDetails';
 import { addToCart } from '../services/CartItemService';
+import { useNotify } from '../notifications/useNotify';
 
 const ProductCard = ({ product, onAddToCart, onOpenDetails }) => {
     const hasDiscount = product.discountPrice && product.discountPrice < product.price;
@@ -11,15 +12,18 @@ const ProductCard = ({ product, onAddToCart, onOpenDetails }) => {
     //const [isModalOpen, setIsModalOpen] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [adding, setAdding] = useState(false);
+    const notify = useNotify();
     const handleAddToCart = async () => {
         setAdding(true);
         try {
-            if (product.stock === 0) {
+            if (product.stock <= 0) {
                 alert('stock insuficiente');
                 return;
             }
             await addToCart(product.idProduct, quantity);
             onAddToCart();
+            // prueba de notificación de tipo de samsung edge
+            notify.success("agregado satisfactoriamente al carrito");
             alert(`${product.name} agregado al carrito`);
             setQuantity(1);
         } catch (error) {
@@ -75,7 +79,7 @@ const ProductCard = ({ product, onAddToCart, onOpenDetails }) => {
                         <div className="text-xl font-bold text-gray-900">S/ {product.price?.toFixed(2)}</div>
 
                     )}
-                    <span className="text-xs  font-bold text-gray-600  "> Stock Disponible {product.stock}</span>
+                    <span className="text-xs  font-bold text-blue-500"> Stock Disponible {product.stock}</span>
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-gray-50 flex flex-col gap-2">
@@ -89,7 +93,7 @@ const ProductCard = ({ product, onAddToCart, onOpenDetails }) => {
                     </button>
                     <button className="w-full bg-red-500 hover:bg-red-800 text-black font-semibold py-2.5 px-4 rounded-lg transition-colors
                         flex items-center justify-center gap-2 shadow-md focus:ring-2 " onClick={() => onOpenDetails(product)}>
-                        <DessertIcon size={18} />
+                        <Info size={18} />
                         Detalles
                     </button>
                 </div>

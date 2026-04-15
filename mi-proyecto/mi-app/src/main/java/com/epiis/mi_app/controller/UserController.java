@@ -48,9 +48,9 @@ public class UserController {
     }
 
     @GetMapping("/{idPerson}")
-    public ResponseEntity<?> getUserById(@PathVariable String id) {
+    public ResponseEntity<?> getUserById(@PathVariable String idPerson) {
         try {
-            return userServices.getUserById(id)
+            return userServices.getUserById(idPerson)
                     .map(user -> ResponseEntity.ok(userServices.mapUserToDto(user)))
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
         } catch (Exception e) {

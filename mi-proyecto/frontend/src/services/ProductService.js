@@ -46,7 +46,15 @@ export const uploadImage = async (file) => {
     // Devuelve la URL (string) que envió el backend
     return response.data;
 };
+export const getAllProduct = async () =>{
+    const response = await axios.get(`${API_URL}/getAll`);
+    return response.data;
+}
 export const getProductDetails = async (productId) => {
     const response = await axios.get(`${API_URL}/details/${productId}`);
+    return response.data;
+}
+export const updateProduct = async(productId, productData) => {
+    const response = await axios.put(`${API_URL}/update/${productId}`, productData);
     return response.data;
 }

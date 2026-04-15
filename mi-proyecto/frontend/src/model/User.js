@@ -1,6 +1,6 @@
 class User {
     constructor(id, firstName, surName, dni, email, phone,
-        password, birthDate, active, registerDate, updateDate) {
+        password, birthDate, active, registerDate, updateDate, confirmPassword = '') {
         this.id = id;
         this.firstName = firstName;
         this.surName = surName;
@@ -12,13 +12,18 @@ class User {
         this.active = active;
         this.registerDate = registerDate;
         this.updateDate = updateDate;
+        this.confirmPassword = confirmPassword;   // ← campo requerido por el backend
     }
     getFullName() {
         return `${this.firstName} ${this.surName}`;
     }
     static fromJson(json) {
-        return new User(json.id, json.firstName, json.surName, json.dni, json.email, json.phone, json.password, json.birthDate, json.active, json.registerDate, json.updateDate);
+        return new User(
+            json.id, json.firstName, json.surName, json.dni,
+            json.email, json.phone, json.password, json.birthDate,
+            json.active, json.registerDate, json.updateDate,
+            json.confirmPassword
+        );
     }
-
 }
 export default User;

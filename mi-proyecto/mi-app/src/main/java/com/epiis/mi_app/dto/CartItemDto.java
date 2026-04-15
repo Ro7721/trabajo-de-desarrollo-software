@@ -1,7 +1,7 @@
 package com.epiis.mi_app.dto;
 
 import java.math.BigDecimal;
-import java.util.Locale.Category;
+import com.epiis.mi_app.model.Category;
 
 public class CartItemDto {
     private String idCar;
@@ -13,6 +13,7 @@ public class CartItemDto {
     private BigDecimal unitPrice;
     private BigDecimal noun;
     private double quantity;
+    private Integer stock; // Stock disponible del producto
 
     public String getImageUrl() {
         return imageUrl;
@@ -84,6 +85,14 @@ public class CartItemDto {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
 }

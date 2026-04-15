@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import logo from '../img/roger.jpeg';
 import {
@@ -23,16 +23,21 @@ const Sidebar = () => {
     const toggleMenu = (menu) => {
         setOpenMenu(openMenu === menu ? null : menu);
     };
+    const closeDashboard = () =>{
+        Navigate('/');
+    }
 
     return (
         <aside className="w-64 h-screen bg-gray-900 text-white fixed">
 
             {/* LOGO */}
             <div className="flex items-center gap-3 p-4 border-b border-gray-700">
-                <div className="logo-img">
+                <div className="h-12 w-12 bg-gray-50 border border-gray-200 rounded flex items-center justify-center text-[10px] text-gray-300">
                     <img src={logo} alt="Logo" />
                 </div>
-                <h1 className="font-bold">SAGA FALABELLA</h1>
+                <div className="h-8 w-40 bg-[#addb30] flex items-center justify-center rounded font-black text-xs italic tracking-tighter">
+                    JURO.com
+                </div>
             </div>
 
             {/* MENU */}
@@ -126,7 +131,7 @@ const Sidebar = () => {
                     />
                 </button>
                 {/* SALIR */}
-                <button className="menu-item text-red-400 mt-6">
+                <button className="menu-item text-red-400 mt-6" onClick={() => closeDashboard}>
                     <FontAwesomeIcon icon={faRightFromBracket} />
                     <span>Salir</span>
                 </button>

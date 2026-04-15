@@ -10,6 +10,9 @@ public class PasswordHash {
     }
 
     public static boolean checkPassword(String password, String storedHash) {
+        if (password == null || storedHash == null) {
+            return false;
+        }
         return encoder.matches(password, storedHash);
     }
 

@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServices {
     @Autowired
     private UserRepository usuaryRepository;
+    //@Autowired 
+    //private PasswordHash passwordHash;
 
     public User mapDtoToUsuary(UserDto dto) {
         User user = new User();
@@ -111,7 +113,6 @@ public class UserServices {
         validateUserDto(dto, false);
         try {
             User user = mapDtoToUsuary(dto);
-            System.out.println(user);
             return usuaryRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateResourceException("Error de integridad de datos: posible duplicado");
@@ -187,5 +188,20 @@ public class UserServices {
         }
         return List.of();
     }
+    // metodo para actualizar contraseña 
+   /*  @Transactional(readOnly = true)
+    public boolean updatePassword(String idUser,String currentPassword, String newPassword){
+        Optional<User> optional = usuaryRepository.findById(idUser);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            if(passwordHash.checkPassword(currentPassword, user.getPassword())){
+                String hashedPassword = passwordHash.hashPassword(newPassword);
+                user.setPassword(hashedPassword);
+                usuaryRepository.save(user);
+                return true;
+            }
+        }
+        return false;
+    }*/
 
 }

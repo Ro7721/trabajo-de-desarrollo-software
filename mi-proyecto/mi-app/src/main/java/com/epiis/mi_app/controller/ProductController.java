@@ -110,10 +110,4 @@ public class ProductController {
             return ResponseEntity.badRequest().body("Error al subir la imagen");
         }
     }
-
-    @GetMapping("/details/{id}")
-    public ResponseEntity<ProductDto> getProductId(@PathVariable String id) {
-        ProductDto dto = productService.getProductoDetailsById(id);
-        return ResponseEntity.ok(dto);
-    }
 }

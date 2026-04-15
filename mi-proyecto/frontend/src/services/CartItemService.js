@@ -15,7 +15,7 @@ export const addToCart = async (productId, quantity = 1) => {
     return response.data;
 }
 export const updateQuantity = async (itemId, quantity) => {
-    const response = await axios.put(`${API_URL}/update/${itemId}`, quantity, axiosConfig);
+    const response = await axios.put(`${API_URL}/update/${itemId}?quantity=${quantity}`, {}, axiosConfig);
     return response.data;
 }
 export const removeItem = async (itemId) => {

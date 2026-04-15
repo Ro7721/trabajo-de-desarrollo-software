@@ -24,7 +24,7 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    private BigDecimal discountPrice;
+    private BigDecimal discountPrice;//precio de descuento
     @Column(nullable = false)
     private Integer stock;
     private String sku;
@@ -42,7 +42,8 @@ public class Product {
     private LocalDateTime createdAt;
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
-
+    // private string brand;//marca
+    // private String imageGallery; // lista de Urls dela fotos adicionales
     public Category getCategory() {
         return category;
     }

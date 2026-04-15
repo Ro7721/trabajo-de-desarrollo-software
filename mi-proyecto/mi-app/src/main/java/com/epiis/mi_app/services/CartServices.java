@@ -15,6 +15,8 @@ import com.epiis.mi_app.model.responseobject.CartResponse;
 import com.epiis.mi_app.repository.CartRepository;
 import com.epiis.mi_app.repository.ProductRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CartServices {
     @Autowired
@@ -59,10 +61,11 @@ public class CartServices {
             dto.setIdPerson(item.getUser() != null ? item.getUser().getIdPerson() : null);
             dto.setIdProduct(item.getProduct().getIdProduct());
             dto.setName(item.getProduct().getName());
-            // dto.setCategory(item.getProduct().getCategory());
+            dto.setCategory(item.getProduct().getCategory());
             dto.setImageUrl(item.getProduct().getImageUrl());
             dto.setQuantity(item.getQuantity());
             dto.setUnitPrice(item.getPrice());
+            dto.setStock(item.getProduct().getStock()); // Incluir stock disponible
             // calcular subtotal del item
             BigDecimal itemNoun = item.getPrice()
                     .multiply(BigDecimal.valueOf(item.getQuantity()));
@@ -99,6 +102,7 @@ public class CartServices {
         cartRepository.deleteById(itemId);
     }
 
+    @Transactional
     public void clearCart(String sessionId) {
         cartRepository.deleteBySessionId(sessionId);
     }

@@ -12,7 +12,7 @@ import jakarta.persistence.MappedSuperclass;
 public abstract class Person implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name = "id_person", nullable = false, unique = true, length = 36)
+    @Column(name = "id_person", nullable = false, unique = true, length = 50)
     private String idPerson;
     @Column(name = "firstname", nullable = false)
     private String firstName;

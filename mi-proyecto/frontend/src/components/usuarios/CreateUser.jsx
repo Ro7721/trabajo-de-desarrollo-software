@@ -140,7 +140,9 @@ const CreateUser = () => {
         }
 
         try {
-            await createUsers(usuario);
+            // Construir payload completo incluyendo confirmPassword
+            const payload = { ...usuario, confirmPassword };
+            await createUsers(payload);
             setSuccessMessage('¡Usuario registrado exitosamente!');
 
             // Limpiar formulario

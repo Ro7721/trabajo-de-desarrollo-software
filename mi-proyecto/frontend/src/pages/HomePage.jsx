@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts, getCategories } from '../services/ProductService';
-import ProductCard from '../components/ProductCard';
+import { getCategories } from '../services/ProductService';
 import { Search, Filter, ShoppingCart, Menu, ChevronDown, X } from 'lucide-react';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import CreateUser from '../components/usuarios/CreateUser';
-import { Link, Links } from 'react-router-dom';
-import ProductDetails from '../components/product/ProductDetails';
+import ProductGallery from '../components/product/ProductGallery';
+import Cart from '../components/carshoping/Cart';
 const HomePage = () => {
-    const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [openAccount, setOpenAccount] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isDetailOpen, setDetailOpen] = useState(false);
-    const [page, setPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [isCartOpen, setIsCartOpen] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
     const [filters, setFilters] = useState({
         category: '',
         search: '',
@@ -23,45 +16,16 @@ const HomePage = () => {
     });
 
     useEffect(() => {
-        loadCategories();
+        getCategories().then(setCategories).catch(console.error);
     }, []);
-
-    useEffect(() => {
-        fetchProducts();
-    }, [page, filters]);
-
-    const fetchProducts = async () => {
-        setLoading(true);
-        try {
-            const data = await getProducts(page, 12, filters);
-            setProducts(data.content);
-            setTotalPages(data.totalPages);
-        } catch (error) {
-            console.error("Error cargando productos", error);
-        }
-        setLoading(false);
-    };
-
-    const loadCategories = async () => {
-        const data = await getCategories();
-        setCategories(data);
-    };
 
     const handleSearch = (e) => {
         e.preventDefault();
-        setPage(0);
-        fetchProducts();
     };
-    const handleOpenDetails = (product) => {
-        setSelectedProduct(product);
-        setDetailOpen(true);
-    }
 
-    const handleAddToCart = () => {
-        // Aquí puedes actualizar el contador del carrito si es necesario
-        // Por ejemplo, llamar a una función para obtener el carrito actualizado
-        fetchProducts(); // Opcional: recargar productos para actualizar stock
-    }
+    const handleCartUpdate = (count) => {
+        setCartCount(count);
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans">
@@ -74,7 +38,7 @@ const HomePage = () => {
                             <Menu size={24} />
                         </button>
                         <h1 className="text-2xl font-black tracking-tighter text-green-700">
-                            FALABELLA<span className="text-gray-900">.com</span>
+                            MiTienda<span className="text-gray-900">.com</span>
                         </h1>
                     </div>
 
@@ -103,10 +67,17 @@ const HomePage = () => {
                                 <ChevronDown size={14} />
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 cursor-pointer hover:text-green-700 transition relative">
+                        <div
+                            className="flex items-center gap-2 cursor-pointer hover:text-green-700 transition relative"
+                            onClick={() => setIsCartOpen(true)}
+                        >
                             <ShoppingCart size={24} />
                             <span className="hidden md:inline font-bold">Carro</span>
-                            <span className="absolute -top-1 -right-2 bg-green-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold border-2 border-white">0</span>
+                            {cartCount > 0 && (
+                                <span className="absolute -top-1 -right-2 bg-green-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold border-2 border-white">
+                                    {cartCount}
+                                </span>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -149,10 +120,7 @@ const HomePage = () => {
                                     <li
                                         key={cat.id}
                                         className={`cursor-pointer transition-colors px-2 py-1.5 rounded-md ${filters.category === cat.name ? 'bg-green-50 text-green-700 font-bold' : 'hover:bg-gray-50 hover:text-gray-900'}`}
-                                        onClick={() => {
-                                            setFilters({ ...filters, category: cat.name });
-                                            setPage(0);
-                                        }}
+                                        onClick={() => setFilters({ ...filters, category: cat.name })}
                                     >
                                         {cat.name}
                                     </li>
@@ -182,55 +150,19 @@ const HomePage = () => {
 
                 {/* Product Section */}
                 <main className="flex-1">
-                    {/* Results Header */}
-                    <div className="mb-6 flex items-center justify-between">
+                    <div className="mb-4">
                         <h2 className="text-xl font-bold text-gray-800">
-                            {filters.search ? `Resultados para "${filters.search}"` : (filters.category || 'Recomendados para ti')}
+                            {filters.search
+                                ? `Resultados para "${filters.search}"`
+                                : filters.category || 'Recomendados para ti'}
                         </h2>
-                        <span className="text-sm text-gray-500">{products.length} productos</span>
                     </div>
 
-                    {loading ? (
-                        <div className="flex justify-center items-center py-32">
-                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"></div>
-                        </div>
-                    ) : (
-                        <>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                {products.map(product => (
-                                    <ProductCard key={product.idProduct} product={product} onOpenDetails={handleOpenDetails} onAddToCart={handleAddToCart} />
-                                ))}
-                                <ProductDetails
-                                    product={selectedProduct}
-                                    isOpen={isDetailOpen}
-                                    onClose={() => setDetailOpen(false)}
-                                />
-                            </div>
-
-                            {/* Pagination */}
-                            {totalPages > 1 && (
-                                <div className="flex justify-center mt-12 gap-2">
-                                    <button
-                                        disabled={page === 0}
-                                        onClick={() => setPage(p => p - 1)}
-                                        className="px-6 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 disabled:opacity-40 hover:bg-gray-50 font-medium transition"
-                                    >
-                                        Anterior
-                                    </button>
-                                    <span className="flex items-center px-4 font-medium text-gray-900">
-                                        {page + 1} / {totalPages}
-                                    </span>
-                                    <button
-                                        disabled={page === totalPages - 1}
-                                        onClick={() => setPage(p => p + 1)}
-                                        className="px-6 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 disabled:opacity-40 hover:bg-gray-50 font-medium transition"
-                                    >
-                                        Siguiente
-                                    </button>
-                                </div>
-                            )}
-                        </>
-                    )}
+                    <ProductGallery
+                        filters={filters}
+                        pageSize={12}
+                        onCartUpdate={handleCartUpdate}
+                    />
                 </main>
             </div>
             {isModalOpen && (
@@ -254,20 +186,12 @@ const HomePage = () => {
                     </div>
                 </div>
             )}
-            {isDetailOpen && (
-                <div className="fixed insert-0 bg-black bg-opacity-50  rounded-xl backdrop-blur-sm z-50 flex justify-center items-center p-4">
-                    {/* contenedor modal*/}
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md relative overflow-hidden animate-fade-in-down">
-                        <button onClick={() => setIsModalOpen(false)} className="">
-                            <X size={15} />
-                        </button>
-                        {/* Rendirazamos mi componente ProductDetail aqui dentro */}
-                        <div className="max-h-[90vh] overflow-y-auto">
-                            <ProductDetails />
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Cart Component */}
+            <Cart
+                isOpen={isCartOpen}
+                onClose={() => setIsCartOpen(false)}
+                onCartUpdate={handleCartUpdate}
+            />
         </div>
     );
 };

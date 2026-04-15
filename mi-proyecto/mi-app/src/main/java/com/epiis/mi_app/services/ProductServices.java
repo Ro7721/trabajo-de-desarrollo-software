@@ -22,6 +22,8 @@ import com.epiis.mi_app.model.Product;
 import com.epiis.mi_app.repository.CategoryRepository;
 import com.epiis.mi_app.repository.ProductRepository;
 
+import org.springframework.transaction.annotation.*;
+
 @Service
 public class ProductServices {
     @Autowired
@@ -50,7 +52,7 @@ public class ProductServices {
         product.setDiscountPrice(productDto.getDiscountPrice());
         return productRepository.save(product);
     }
-
+    @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
