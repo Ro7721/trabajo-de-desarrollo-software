@@ -1,6 +1,5 @@
 package com.epiis.mi_app.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -35,8 +34,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users")
 @CrossOrigin("http://localhost:3000")
 public class UserController {
-    @Autowired
-    private UserServices userServices;
+    private final UserServices userServices;
+
+    public UserController(UserServices userServices) {
+        this.userServices = userServices;
+    }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<UserDto>> getAllUsers() {

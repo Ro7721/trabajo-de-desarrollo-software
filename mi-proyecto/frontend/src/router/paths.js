@@ -11,6 +11,10 @@ export const PATHS = {
     HOME: '/',
     PRODUCT_DETAIL: '/product/:id',   // usar generatePath(PATHS.PRODUCT_DETAIL, { id })
 
+    // ── Autenticación ───────────────────────────────
+    LOGIN: '/login',
+    REGISTER: '/register',
+
     // ── Admin ───────────────────────────────────────
     ADMIN: {
         ROOT: '/admin',

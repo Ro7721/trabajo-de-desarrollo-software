@@ -20,33 +20,32 @@ import CreateUser from '../components/usuarios/CreateUser';
 // ── Componente DashboardCard ──────────────────────
 import DashboardCard from '../components/DashboardCard';
 
+// ── Autenticación ──────────────────────────────────
+import LoginPage from '../pages/auth/LoginPage';
+import RegisterPage from '../pages/auth/RegisterPage';
+import ProtectedRoute from '../components/auth/ProtectedRoute';
+import { useAuth } from '../context/AuthContext';
+import { LogOut } from 'lucide-react';
+
 /**
  * AppRouter — Punto único de definición de rutas.
- *
- * Estructura:
- *  /                        → Tienda pública (HomePage)
- *  /admin/*                 → Panel admin (Dashboard como layout)
- *    /admin                 → DashboardCard (índice)
- *    /admin/productos/listar
- *    /admin/productos/agregar
- *    /admin/productos/editar
- *    /admin/usuario/listar
- *    /admin/usuario/agregar
- *    /admin/ventas/listar
- *    /admin/reportes/listar
  */
 const AppRouter = () => {
     return (
         <BrowserRouter>
             {/* Navbar superior global (solo visible en tienda pública, oculto en admin) */}
-            <PublicNav />
+            {/* <PublicNav /> */}
 
             <Routes>
-                {/* ── Tienda pública ──────────────────── */}
+                {/* ── Rutas Públicas ──────────────────── */}
                 <Route path={PATHS.HOME} element={<HomePage />} />
+                <Route path={PATHS.LOGIN} element={<LoginPage />} />
+                <Route path={PATHS.REGISTER} element={<RegisterPage />} />
 
-                {/* ── Panel administrador ─────────────── */}
-                <Route path="/admin/*" element={<Dashboard />} />
+                {/* ── Rutas Protegidas (Panel Admin) ──── */}
+                <Route element={<ProtectedRoute />}>
+                    <Route path="/admin/*" element={<Dashboard />} />
+                </Route>
 
                 {/* Ruta no encontrada → redirige a inicio */}
                 <Route path={PATHS.NOT_FOUND} element={<Navigate to={PATHS.HOME} replace />} />
@@ -55,30 +54,6 @@ const AppRouter = () => {
     );
 };
 
-/**
- * Barra de navegación pública (Tienda / Admin).
- * Solo se muestra en rutas fuera de /admin.
- */
-const PublicNav = () => {
-    // Ocultamos el nav en rutas de admin (Dashboard tiene su propio sidebar)
-    const isAdmin = window.location.pathname.startsWith('/admin');
-    if (isAdmin) return null;
 
-    return (
-        <nav className="bg-gray-800 text-white p-4">
-            <div className="container mx-auto flex gap-4">
-                <a href={PATHS.HOME} className="hover:text-green-400 font-bold">
-                    Tienda
-                </a>
-                <a href={PATHS.ADMIN.PRODUCTS.CREATE} className="hover:text-green-400">
-                    Registrar Producto
-                </a>
-                <a href={PATHS.ADMIN.ROOT} className="hover:text-green-400">
-                    Dashboard
-                </a>
-            </div>
-        </nav>
-    );
-};
 
 export default AppRouter;

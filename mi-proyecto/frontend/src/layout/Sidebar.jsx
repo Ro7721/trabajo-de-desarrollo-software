@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate, NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import logo from '../img/roger.jpeg';
 import {
@@ -19,13 +19,14 @@ import '../css/dashboard/sidebar.css';
 
 const Sidebar = () => {
     const [openMenu, setOpenMenu] = useState(null);
-
+    const navigate = useNavigate();
     const toggleMenu = (menu) => {
         setOpenMenu(openMenu === menu ? null : menu);
     };
-    const closeDashboard = () =>{
-        Navigate('/');
+    const closeDashboard = () => {
+        navigate('/login');
     }
+
 
     return (
         <aside className="w-64 h-screen bg-gray-900 text-white fixed">
@@ -131,7 +132,7 @@ const Sidebar = () => {
                     />
                 </button>
                 {/* SALIR */}
-                <button className="menu-item text-red-400 mt-6" onClick={() => closeDashboard}>
+                <button className="menu-item text-red-400 mt-6" onClick={closeDashboard}>
                     <FontAwesomeIcon icon={faRightFromBracket} />
                     <span>Salir</span>
                 </button>

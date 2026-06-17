@@ -4,25 +4,25 @@ import { useNavigate } from 'react-router-dom';
 import { NewspaperIcon } from 'lucide-react';
 
 const CreateProduct = () => {
-    const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [notification, setNotification] = useState(null);
     // Estado inicial mapeado a tu entidad Java
-    const [formData, setFormData] = useState({
+    const initialFormState = {
         name: '',
         sku: '',
         description: '',
-        price: '',          // BigDecimal en Java
-        discountPrice: '',  // BigDecimal en Java
-        stock: '',          // Integer en Java
-        categoryId: '',     // Relación ManyToOne
-        imageUrl: '',       // String URL
-        isFeatured: false,  // boolean
-        rating: 0,          // double (Opcional, inicializamos en 0)
-        reviewCount: 0      // Integer (Inicializamos en 0)
-    });
+        price: '',
+        discountPrice: '',
+        stock: '',
+        categoryId: '',
+        imageUrl: '',
+        isFeatured: false,
+        rating: 0,
+        reviewCount: 0
+    };
+    const [formData, setFormData] = useState(initialFormState);
 
     useEffect(() => {
         getCategories()
@@ -41,6 +41,7 @@ const CreateProduct = () => {
             setFormData(prev => ({ ...prev, imageUrl: url }));
             if (url && url.success) {
                 setNotification({ type: 'success', message: 'Imagen subido correctamente' })
+
                 setTimeout(() => {
                     setNotification(null);
                 }, 1000);
@@ -114,7 +115,8 @@ const CreateProduct = () => {
                 }, 1200);
             }
             alert('¡Producto registrado con éxito!');
-            navigate('/');
+            setFormData(initialFormState);
+
 
         } catch (error) {
             console.error("Error al guardar:", error);

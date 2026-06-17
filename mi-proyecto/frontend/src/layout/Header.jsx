@@ -1,13 +1,23 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
+    const { user } = useAuth();
+
+    // Función para formatear el rol (ej: ROLE_ADMIN -> Administrador)
+    const formatRole = (role) => {
+        if (!role) return 'Usuario';
+        const roleName = role.replace('ROLE_', '');
+        return roleName.charAt(0).toUpperCase() + roleName.slice(1).toLowerCase();
+    };
+
     return (
         <header className="h-16 bg-white text-gray-800 flex items-center justify-between px-6 shadow-sm sticky top-0 z-40 border-b border-gray-200">
 
             <h2 className="font-bold text-xl tracking-tight text-gray-700">
-                Dashboard Administrador
+                Dashboard {user?.role === 'ROLE_ADMIN' ? 'Administrador' : 'Panel'}
             </h2>
 
             <div className="flex items-center gap-6">
@@ -18,8 +28,12 @@ const Header = () => {
                 <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition">
                     <FontAwesomeIcon icon={faUserCircle} size="2x" className="text-gray-400" />
                     <div className="flex flex-col items-start leading-none">
-                        <span className="font-semibold text-sm">Admin</span>
-                        <span className="text-xs text-gray-500">Super User</span>
+                        <span className="font-semibold text-sm">
+                            {user ? `${user.firstName} ${user.surName || ''}` : 'Cargando...'}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                            {formatRole(user?.role)}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -29,3 +43,4 @@ const Header = () => {
 };
 
 export default Header;
+

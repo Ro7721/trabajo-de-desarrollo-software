@@ -9,16 +9,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.epiis.mi_app.model.User;
 
+/**
+ * Implementación de UserDetails que envuelve nuestra entidad User.
+ * Spring Security usa esto para la autenticación y autorización.
+ */
 public class CustomUserDetails implements UserDetails {
     private final User user;
 
-    public CustomUserDetails(User users) {
-        this.user = users;
+    public CustomUserDetails(User user) {
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_ " + user.getDni()));
+        // Mapear el rol del usuario a un GrantedAuthority de Spring Security
+        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
@@ -28,7 +33,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getFirstName();
+        // Usar email como identificador único (no firstName)
+        return user.getEmail();
     }
 
     @Override
@@ -43,7 +49,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.equals(user.isActive());
+        // Retornar directamente el estado activo del usuario
+        return user.isActive();
     }
 
     public User getUser() {

@@ -7,34 +7,63 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true, // Importante: permite enviar cookies de sesión
+    withCredentials: true,
 });
 
-export const usuarioService = {
-    // GET all usuarios
-    getUsuarios: () => api.get('/usuarios'),
+// Request Interceptor: Attach accessToken to every outgoing request
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
-    // GET usuario by id
-    getUsuario: (id) => api.get(`/usuarios/${id}`),
+// Response Interceptor: Handle 401 Unauthorized globally to refresh token
+api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
 
-    // POST crear usuario
-    createUsuario: (usuario) => api.post('/usuarios', usuario),
+        // Evitar recurrencia infinita y chequear que el error provenga exactamente del Backend por credenciales
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            try {
+                const refreshToken = localStorage.getItem('refreshToken');
+                if (!refreshToken) {
+                    throw new Error('No refresh token available');
+                }
 
-    // PUT actualizar usuario
-    updateUsuario: (id, usuario) => api.put(`/usuarios/${id}`, usuario),
+                // Call the backend directly via Axios so we don't pass through our own interceptor
+                const response = await axios.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
+                const { accessToken } = response.data;
 
-    // DELETE eliminar usuario
-    deleteUsuario: (id) => api.delete(`/usuarios/${id}`),
-};
-export const productoService = {
-    getProducts: () => api.get('/productos'),
-    getProduct: (id) => api.get(`/search/${id}`),
-    getFeaturedProducts: () => api.get('/productos/featured'),
-    getCategories: () => api.get('/productos/categories'),
-    getProductsCount: () => api.get('/productos/count'),
-    createProduct: (producto) => api.post('/productos/insert', producto),
-    updateProduct: (id, producto) => api.put(`/productos/update/${id}`, producto),
-    deleteProduct: (id) => api.delete(`/productos/delete/${id}`),
-}
+                // Save new token
+                localStorage.setItem('accessToken', accessToken);
+
+                // Update original request
+                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+
+                // Re-attempt original request
+                return api(originalRequest);
+
+            } catch (refreshError) {
+                // If refresh fails, purge tokens so AuthContext redirects to login
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                // You can emit an event or force reload if needed
+                window.location.href = '/login';
+                return Promise.reject(refreshError);
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
+
+
 
 export default api;

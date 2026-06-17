@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.epiis.mi_app.dto.CartItemDto;
@@ -19,10 +18,14 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class CartServices {
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    
+
+    public CartServices(CartRepository cartRepository, ProductRepository productRepository) {
+        this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
+    }
 
     public void addToCart(String productId, Integer quantity, String sessionId) {
         Product product = productRepository.findById(productId)

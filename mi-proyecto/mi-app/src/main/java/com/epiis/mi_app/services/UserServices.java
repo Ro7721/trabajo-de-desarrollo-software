@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.epiis.mi_app.dto.UserDto;
@@ -20,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class UserServices {
-    @Autowired
-    private UserRepository usuaryRepository;
+    private final UserRepository usuaryRepository;
+    public UserServices(UserRepository userRepository){
+        this.usuaryRepository = userRepository;
+    }
     //@Autowired 
     //private PasswordHash passwordHash;
 
@@ -36,6 +37,9 @@ public class UserServices {
         user.setEmail(dto.getEmail());
         user.setPassword(PasswordHash.hashPassword(dto.getPassword()));
         user.setActive(true); // Establecer el usuario como activo por defecto
+        user.setRole(com.epiis.mi_app.model.Role.ROLE_USER); // Rol por defecto
+        user.setRegisterDate(java.time.LocalDate.now());
+        user.setUpdateDate(java.time.LocalDate.now());
         return user;
     }
 
@@ -159,7 +163,7 @@ public class UserServices {
     }
 
     public boolean authenticate(String email, String password) {
-        Optional<User> userOp = usuaryRepository.findByDniAndActiveTrue(email);
+        Optional<User> userOp = usuaryRepository.findByEmailAndActiveTrue(email);
         if (userOp.isPresent()) {
             User user = userOp.get();
             return PasswordHash.checkPassword(password, user.getPassword());

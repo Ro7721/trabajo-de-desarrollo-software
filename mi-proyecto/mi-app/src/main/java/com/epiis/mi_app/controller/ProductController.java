@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,8 +30,11 @@ import com.epiis.mi_app.services.ProductServices;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
-    @Autowired
-    private ProductServices productService;
+    private final ProductServices productService;
+    
+    public ProductController(ProductServices productService) {
+        this.productService = productService;
+    }
 
     @GetMapping
     public ResponseEntity<Page<Product>> getAllProducts(

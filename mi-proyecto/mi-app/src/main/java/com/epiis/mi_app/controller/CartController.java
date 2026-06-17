@@ -1,6 +1,5 @@
 package com.epiis.mi_app.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +23,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/cart")
 public class CartController {
-    @Autowired
-    private CartServices cartServices;
+
+    private final CartServices cartServices;
+    
+    public CartController(CartServices cartServices) {
+        this.cartServices = cartServices;
+    }
 
     // AGREGAR producto al carrito
     @PostMapping("/add")
