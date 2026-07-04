@@ -7,8 +7,12 @@ import jakarta.persistence.Column;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
 
 @MappedSuperclass
+@Getter
+@Setter
 public abstract class Person implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -24,53 +28,5 @@ public abstract class Person implements Serializable {
     private String phone;
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
-
-    public String getIdPerson() {
-        return idPerson;
-    }
-
-    public void setIdPerson(String idPerson) {
-        this.idPerson = idPerson;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
 
 }
