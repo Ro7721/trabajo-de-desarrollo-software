@@ -28,7 +28,7 @@ const LoginPage = () => {
     };
 
     const adminOptions = [
-        { icon: <Users size={20} />, label: 'Gestionar Usuarios' },
+        { icon: <Users size={20} />, label: 'Gestionar Usuarios', color: "text-red-300" },
         { icon: <BarChart3 size={20} />, label: 'Ver Informes' },
         { icon: <Settings size={20} />, label: 'Configuración del Sistema' },
         { icon: <ShieldCheck size={20} />, label: 'Seguridad Avanzada' },
